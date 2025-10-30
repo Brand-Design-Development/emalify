@@ -3,9 +3,10 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, LayoutDashboard, Users, PieChart } from "lucide-react";
+import { Menu, Users, PieChart, RefreshCw } from "lucide-react";
 import { cn } from "@emalify/lib/utils";
 import Image from "next/image";
+import { api } from "@emalify/trpc/react";
 
 type ClientLayoutProps = {
   children: React.ReactNode;
@@ -27,6 +28,14 @@ const sidebarItems = [
 export default function ClientLayout({ children }: ClientLayoutProps) {
   const [sidebarExpanded, setSidebarExpanded] = useState(false);
   const pathname = usePathname();
+  const utils = api.useUtils();
+  const [isrefreshing, setIsrefreshing] = useState(false);
+
+  const handlerefresh = async () => {
+    setIsrefreshing(true);
+    await utils.invalidate();
+    setTimeout(() => setIsrefreshing(false), 500);
+  };
 
   // Close sidebar when clicking outside
   useEffect(() => {
@@ -66,28 +75,43 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
         className="flex h-16 items-center px-4"
         style={{ backgroundColor: "#0e75bc" }}
       >
-        <div className="flex items-center gap-3">
-          {/* Hamburger Menu */}
-          <button
-            id="hamburger"
-            onClick={() => setSidebarExpanded(!sidebarExpanded)}
-            className="cursor-pointer rounded-lg p-2 transition-colors hover:bg-blue-700"
-          >
-            <Menu className="h-5 w-5 text-white" />
-          </button>
+        <div className="flex flex-1 items-center justify-between">
+          <div className="flex items-center gap-3">
+            {/* Hamburger Menu */}
+            <button
+              id="hamburger"
+              onClick={() => setSidebarExpanded(!sidebarExpanded)}
+              className="cursor-pointer rounded-lg p-2 transition-colors hover:bg-blue-700"
+            >
+              <Menu className="h-5 w-5 text-white" />
+            </button>
 
-          {/* Logo and Brand */}
-          <Link href="/" className="flex items-center gap-3">
-            <Image
-              src="/logo.png"
-              alt="Emalify Logo"
-              width={140}
-              height={140}
+            {/* Logo and Brand */}
+            <Link href="/" className="flex items-center gap-3">
+              <Image
+                src="/logo.png"
+                alt="Emalify Logo"
+                width={140}
+                height={140}
+              />
+              <p className="text-lg font-semibold text-white">
+                Lead Management System
+              </p>
+            </Link>
+          </div>
+
+          {/* refresh Button */}
+          <button
+            onClick={handlerefresh}
+            disabled={isrefreshing}
+            className="flex cursor-pointer items-center gap-2 rounded-lg px-4 py-2 text-white transition-colors hover:bg-blue-800/40 disabled:cursor-not-allowed disabled:opacity-50"
+            title="Refresh all data"
+          >
+            <RefreshCw
+              className={cn("h-5 w-5", isrefreshing && "animate-spin")}
             />
-            <p className="text-lg font-semibold text-white">
-              Lead Management System
-            </p>
-          </Link>
+            <span className="text-sm font-medium">Refresh</span>
+          </button>
         </div>
       </header>
 
