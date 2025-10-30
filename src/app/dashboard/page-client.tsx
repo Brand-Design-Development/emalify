@@ -97,31 +97,43 @@ export function DashboardPageClient() {
 
   // Conversion Funnel Data - showing actual progression
   // Calculate percentages relative to total leads (not first stage)
-  const totalLeadsCount = stats?.totalLeads ?? 1;
+  const totalLeadsCount = stats?.totalLeads ?? 0;
   const funnelData = [
     {
       name: "Form Submitted",
       value: formSubmitted,
       fill: "#4285F4",
-      percentage: ((formSubmitted / totalLeadsCount) * 100).toFixed(1),
+      percentage:
+        totalLeadsCount > 0
+          ? ((formSubmitted / totalLeadsCount) * 100).toFixed(1)
+          : "0",
     },
     {
       name: "Demo Call Booked",
       value: demoCallBooked,
       fill: "#0e75bc",
-      percentage: ((demoCallBooked / totalLeadsCount) * 100).toFixed(1),
+      percentage:
+        totalLeadsCount > 0
+          ? ((demoCallBooked / totalLeadsCount) * 100).toFixed(1)
+          : "0",
     },
     {
       name: "Potential Lead",
       value: potentialLeads,
       fill: "#fcd11f",
-      percentage: ((potentialLeads / totalLeadsCount) * 100).toFixed(1),
+      percentage:
+        totalLeadsCount > 0
+          ? ((potentialLeads / totalLeadsCount) * 100).toFixed(1)
+          : "0",
     },
     {
       name: "Converted",
       value: totalConverted,
       fill: "#34A853",
-      percentage: ((totalConverted / totalLeadsCount) * 100).toFixed(1),
+      percentage:
+        totalLeadsCount > 0
+          ? ((totalConverted / totalLeadsCount) * 100).toFixed(1)
+          : "0",
     },
   ];
 

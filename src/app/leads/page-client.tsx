@@ -243,17 +243,16 @@ export function LeadsPageClient() {
       {/* Leads Table */}
       <div className="min-h-0 flex-1 rounded-lg bg-gray-50">
         <div className="flex h-full flex-col overflow-hidden">
-          {!leadsLoading && leads?.length === 0 && (
+          {leadsLoading ? (
+            <div className="flex h-full w-full items-center justify-center">
+              <LoadingSpinner message="Loading leads..." />
+            </div>
+          ) : !leads?.length ? (
             <div className="py-12 text-center">
               <Users className="mx-auto h-12 w-12 text-gray-400" />
               <p className="mt-2 text-sm text-gray-600">
                 No leads found. Adjust your filters or add new leads.
               </p>
-            </div>
-          )}
-          {leadsLoading ? (
-            <div className="flex h-full w-full items-center justify-center">
-              <LoadingSpinner message="Loading leads..." />
             </div>
           ) : (
             <div className="overflow-auto">
