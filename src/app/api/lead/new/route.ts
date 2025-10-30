@@ -1,6 +1,12 @@
 import { NextResponse } from "next/server";
 import { db } from "@emalify/server/db";
 import { z } from "zod";
+import {
+  LeadLabels,
+  LeadLabelZod,
+  LeadProgresses,
+  LeadProgressZod,
+} from "@emalify/lib/types";
 
 const leadSchema = z.object({
   "Full Name": z.string(),
@@ -9,10 +15,10 @@ const leadSchema = z.object({
   Company: z.string(),
   "Current Position": z.string(),
   "Submission Date": z.string(),
-  Label: z.string(),
+  Label: LeadLabelZod,
   threadId: z.string(),
   formMode: z.string(),
-  Progress: z.string(),
+  Progress: LeadProgressZod,
 });
 
 export async function POST(request: Request) {

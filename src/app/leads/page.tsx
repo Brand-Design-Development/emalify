@@ -1,5 +1,12 @@
-import { LeadsView } from "@emalify/app/_components/leads-view";
+import { LeadsPageClient } from "@emalify/app/leads/page-client";
+import { api, HydrateClient } from "@emalify/trpc/server";
 
-export default function LeadsPage() {
-  return <LeadsView />;
+export default async function LeadsPage() {
+  await api.lead.getAll.prefetch({});
+
+  return (
+    <HydrateClient>
+      <LeadsPageClient />;
+    </HydrateClient>
+  );
 }

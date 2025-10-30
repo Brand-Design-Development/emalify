@@ -17,6 +17,7 @@ import {
 } from "recharts";
 import { format } from "date-fns";
 import { api } from "@emalify/trpc/react";
+import { LoadingSpinner } from "../components/loading-spinner";
 
 const COLORS = {
   "High Budget Lead": "#EA4335",
@@ -27,18 +28,12 @@ const COLORS = {
   "Potential Lead": "#FBBC04",
   Converted: "#34A853",
   "Dead Lead": "#9AA0A6",
-};
+} as const;
 
-export function DashboardView() {
-  const { data: stats, isLoading: statsLoading } = api.lead.getStats.useQuery();
-
-  if (statsLoading) {
-    return (
-      <div className="flex min-h-full items-center justify-center">
-        <div className="text-lg text-gray-600">Loading dashboard...</div>
-      </div>
-    );
-  }
+export function DashboardPageClient() {
+  const { data: stats } = api.lead.getStats.useQuery();
+  if (!stats)
+    throw new Error("Stats should be available from server side prefetch");
 
   // Prepare data for charts
   const labelChartData =

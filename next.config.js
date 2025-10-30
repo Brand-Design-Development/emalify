@@ -5,6 +5,12 @@
 import "./src/env.js";
 
 /** @type {import("next").NextConfig} */
-const config = {};
+const config = {
+  experimental: {
+    staleTimes: {
+      dynamic: 60 * 60, // Let tanstack-query handle refetching
+    },
+  },
+};
 
 export default config;

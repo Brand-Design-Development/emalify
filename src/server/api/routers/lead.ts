@@ -1,20 +1,12 @@
 import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "@emalify/server/api/trpc";
-
-const leadLabelEnum = z.enum([
-  "High Budget Lead",
-  "Medium Budget Lead",
-  "Low Budget Lead",
-]);
-
-const leadProgressEnum = z.enum([
-  "Form Submitted",
-  "Demo Call Booked",
-  "Dead Lead",
-  "Potential Lead",
-  "Converted",
-]);
+import {
+  LeadLabels,
+  LeadLabelZod,
+  LeadProgressZod,
+  LeadProgresses,
+} from "@emalify/lib/types";
 
 export const leadRouter = createTRPCRouter({
   // Get all leads with optional filters
@@ -84,8 +76,8 @@ export const leadRouter = createTRPCRouter({
         phoneNumber: z.string().optional(),
         company: z.string().optional(),
         currentPosition: z.string().optional(),
-        label: leadLabelEnum.optional(),
-        progress: leadProgressEnum.optional(),
+        label: LeadLabelZod.optional(),
+        progress: LeadProgressZod.optional(),
       }),
     )
     .mutation(async ({ ctx, input }) => {

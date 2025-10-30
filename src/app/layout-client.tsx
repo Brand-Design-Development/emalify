@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, LayoutDashboard, Users } from "lucide-react";
 import { cn } from "@emalify/lib/utils";
+import Image from "next/image";
 
 type ClientLayoutProps = {
   children: React.ReactNode;
@@ -71,10 +72,12 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
 
           {/* Logo and Brand */}
           <Link href="/" className="flex items-center gap-2">
-            <div className="rounded-lg bg-red-500 p-2">
-              <Users className="h-6 w-6 text-white" />
-            </div>
-            <span className="text-xl font-semibold text-gray-900">Emalify</span>
+            <Image
+              src="/logo.png"
+              alt="Emalify Logo"
+              width={140}
+              height={140}
+            />
           </Link>
         </div>
 

@@ -4,7 +4,7 @@ import { type Metadata } from "next";
 import { Geist } from "next/font/google";
 
 import { TRPCReactProvider } from "@emalify/trpc/react";
-import ClientLayout from "@emalify/app/_components/client-layout";
+import ClientLayout from "@emalify/app/layout-client";
 
 export const metadata: Metadata = {
   title: "Emalify - Lead Management System",
