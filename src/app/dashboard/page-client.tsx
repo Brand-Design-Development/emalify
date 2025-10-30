@@ -40,8 +40,6 @@ const COLORS = {
 
 export function DashboardPageClient() {
   const { data: stats } = api.lead.getStats.useQuery();
-  if (!stats)
-    throw new Error("Stats should be available from server side prefetch");
 
   // Prepare data for charts
   const labelChartData =

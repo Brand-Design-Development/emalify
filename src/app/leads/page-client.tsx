@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   Users,
   Phone,
@@ -54,7 +54,6 @@ export function LeadsPageClient() {
     Partial<NonNullable<typeof leads>[number]>
   >({});
 
-  const isFirstRender = useRef(true);
   const { data: leads, isLoading: leadsLoading } = api.lead.getAll.useQuery({
     label: labelFilter || undefined,
     progress: progressFilter || undefined,
@@ -62,9 +61,6 @@ export function LeadsPageClient() {
     startDate: startDate || undefined,
     endDate: endDate || undefined,
   });
-  if (!leads && isFirstRender.current)
-    throw new Error("Leads should be available from server side prefetch");
-  else isFirstRender.current = false;
 
   const utils = api.useUtils();
   const updateLead = api.lead.update.useMutation({
