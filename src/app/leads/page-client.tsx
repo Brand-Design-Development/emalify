@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import {
   Users,
   Phone,
@@ -20,6 +20,7 @@ import { format } from "date-fns";
 import { api } from "@emalify/trpc/react";
 import type { Lead, LeadLabel, LeadProgress } from "@emalify/lib/types";
 import { LoadingSpinner } from "../components/loading-spinner";
+import { Spinner } from "../components/loading-spinner/spinner";
 import WhatsappIcon from "./whatsapp-icon";
 import GoogleCalendarIcon from "./google-calendar-icon";
 
@@ -110,6 +111,28 @@ export function LeadsPageClient() {
       deleteLead.mutate({ id });
     }
   };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleSave();
+    } else if (e.key === "Escape") {
+      e.preventDefault();
+      handleCancel();
+    }
+  };
+
+  useEffect(() => {
+    const handleGlobalKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && editingLead) {
+        e.preventDefault();
+        handleCancel();
+      }
+    };
+
+    window.addEventListener("keydown", handleGlobalKeyDown);
+    return () => window.removeEventListener("keydown", handleGlobalKeyDown);
+  }, [editingLead]);
 
   return (
     <div className="p-8">
@@ -264,7 +287,11 @@ export function LeadsPageClient() {
                               disabled={updateLead.isPending}
                               className="cursor-pointer rounded p-1 text-green-600 hover:bg-green-50 disabled:cursor-not-allowed disabled:opacity-50"
                             >
-                              <Save className="h-4 w-4" />
+                              {updateLead.isPending ? (
+                                <Spinner className="h-4 w-4 border-2 border-green-600 border-t-transparent" />
+                              ) : (
+                                <Save className="h-4 w-4" />
+                              )}
                             </button>
                             <button
                               onClick={handleCancel}
@@ -276,17 +303,17 @@ export function LeadsPageClient() {
                         ) : (
                           <div className="flex gap-2">
                             <button
-                              onClick={() => handleEdit(lead)}
-                              className="cursor-pointer rounded p-1 text-blue-600 hover:bg-blue-50"
-                            >
-                              <Edit2 className="h-4 w-4" />
-                            </button>
-                            <button
                               onClick={() => handleDelete(lead.id)}
                               disabled={deleteLead.isPending}
                               className="cursor-pointer rounded p-1 text-red-600 hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50"
                             >
                               <Trash2 className="h-4 w-4" />
+                            </button>
+                            <button
+                              onClick={() => handleEdit(lead)}
+                              className="cursor-pointer rounded p-1 text-blue-600 hover:bg-blue-50"
+                            >
+                              <Edit2 className="h-4 w-4" />
                             </button>
                           </div>
                         )}
@@ -302,6 +329,7 @@ export function LeadsPageClient() {
                                 fullName: e.target.value,
                               })
                             }
+                            onKeyDown={handleKeyDown}
                             className="w-full rounded border border-gray-300 px-2 py-1 text-sm"
                           />
                         ) : (
@@ -321,6 +349,7 @@ export function LeadsPageClient() {
                                 email: e.target.value,
                               })
                             }
+                            onKeyDown={handleKeyDown}
                             className="w-full rounded border border-gray-300 px-2 py-1 text-sm"
                           />
                         ) : (
@@ -358,6 +387,7 @@ export function LeadsPageClient() {
                                 phoneNumber: e.target.value,
                               })
                             }
+                            onKeyDown={handleKeyDown}
                             className="w-full rounded border border-gray-300 px-2 py-1 text-sm"
                           />
                         ) : (
@@ -395,6 +425,7 @@ export function LeadsPageClient() {
                                 company: e.target.value,
                               })
                             }
+                            onKeyDown={handleKeyDown}
                             className="w-full rounded border border-gray-300 px-2 py-1 text-sm"
                           />
                         ) : (
@@ -414,6 +445,7 @@ export function LeadsPageClient() {
                                 currentPosition: e.target.value,
                               })
                             }
+                            onKeyDown={handleKeyDown}
                             className="w-full rounded border border-gray-300 px-2 py-1 text-sm"
                           />
                         ) : (
@@ -432,6 +464,7 @@ export function LeadsPageClient() {
                                 label: e.target.value as Lead["label"],
                               })
                             }
+                            onKeyDown={handleKeyDown}
                             className="w-full cursor-pointer rounded border border-gray-300 px-2 py-1 text-sm"
                           >
                             <option value="High Budget Lead">
@@ -464,6 +497,7 @@ export function LeadsPageClient() {
                                 progress: e.target.value as Lead["progress"],
                               })
                             }
+                            onKeyDown={handleKeyDown}
                             className="w-full cursor-pointer rounded border border-gray-300 px-2 py-1 text-sm"
                           >
                             <option value="Form Submitted">
