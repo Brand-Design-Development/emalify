@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, LayoutDashboard, Users } from "lucide-react";
+import { Menu, LayoutDashboard, Users, PieChart } from "lucide-react";
 import { cn } from "@emalify/lib/utils";
 import Image from "next/image";
 
@@ -15,7 +15,7 @@ const sidebarItems = [
   {
     name: "Dashboard",
     href: "/dashboard",
-    icon: LayoutDashboard,
+    icon: PieChart,
   },
   {
     name: "Leads",
