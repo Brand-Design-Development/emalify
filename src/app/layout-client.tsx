@@ -81,7 +81,7 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
             <button
               id="hamburger"
               onClick={() => setSidebarExpanded(!sidebarExpanded)}
-              className="cursor-pointer rounded-lg p-2 transition-colors hover:bg-blue-700"
+              className="cursor-pointer rounded-lg p-2 transition-colors hover:bg-blue-800/40"
             >
               <Menu className="h-5 w-5 text-white" />
             </button>
