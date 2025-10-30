@@ -20,12 +20,12 @@ import { api } from "@emalify/trpc/react";
 import { LoadingSpinner } from "../components/loading-spinner";
 
 const COLORS = {
-  "High Budget Lead": "#EA4335",
-  "Medium Budget Lead": "#FBBC04",
+  "High Budget Lead": "#0e75bc",
+  "Medium Budget Lead": "#fcd11f",
   "Low Budget Lead": "#34A853",
   "Form Submitted": "#4285F4",
-  "Demo Call Booked": "#EA4335",
-  "Potential Lead": "#FBBC04",
+  "Demo Call Booked": "#0e75bc",
+  "Potential Lead": "#fcd11f",
   Converted: "#34A853",
   "Dead Lead": "#9AA0A6",
 } as const;
@@ -79,7 +79,7 @@ export function DashboardPageClient() {
 
       {/* Stats Cards */}
       <div className="mb-8 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-        <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+        <div className="rounded-lg bg-gray-50 p-6">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-600">Total Leads</p>
@@ -87,13 +87,16 @@ export function DashboardPageClient() {
                 {stats?.totalLeads || 0}
               </p>
             </div>
-            <div className="rounded-full bg-red-100 p-3">
-              <Users className="h-6 w-6 text-red-600" />
+            <div
+              className="rounded-full p-3"
+              style={{ backgroundColor: "#0e75bc20" }}
+            >
+              <Users className="h-6 w-6" style={{ color: "#0e75bc" }} />
             </div>
           </div>
         </div>
 
-        <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+        <div className="rounded-lg bg-gray-50 p-6">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-600">Converted</p>
@@ -107,7 +110,7 @@ export function DashboardPageClient() {
           </div>
         </div>
 
-        <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+        <div className="rounded-lg bg-gray-50 p-6">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-600">Conversion Rate</p>
@@ -115,13 +118,16 @@ export function DashboardPageClient() {
                 {conversionRate}%
               </p>
             </div>
-            <div className="rounded-full bg-blue-100 p-3">
-              <TrendingUp className="h-6 w-6 text-blue-600" />
+            <div
+              className="rounded-full p-3"
+              style={{ backgroundColor: "#0e75bc20" }}
+            >
+              <TrendingUp className="h-6 w-6" style={{ color: "#0e75bc" }} />
             </div>
           </div>
         </div>
 
-        <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+        <div className="rounded-lg bg-gray-50 p-6">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-600">High Budget</p>
@@ -130,8 +136,11 @@ export function DashboardPageClient() {
                   ?.count || 0}
               </p>
             </div>
-            <div className="rounded-full bg-yellow-100 p-3">
-              <DollarSign className="h-6 w-6 text-yellow-600" />
+            <div
+              className="rounded-full p-3"
+              style={{ backgroundColor: "#fcd11f40" }}
+            >
+              <DollarSign className="h-6 w-6" style={{ color: "#d4a000" }} />
             </div>
           </div>
         </div>
@@ -140,7 +149,7 @@ export function DashboardPageClient() {
       {/* Charts */}
       <div className="mb-8 grid gap-6 lg:grid-cols-2">
         {/* Lead Labels Distribution */}
-        <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+        <div className="rounded-lg bg-gray-50 p-6">
           <h2 className="mb-4 text-lg font-semibold text-gray-900">
             Lead Budget Distribution
           </h2>
@@ -171,7 +180,7 @@ export function DashboardPageClient() {
         </div>
 
         {/* Progress Status */}
-        <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+        <div className="rounded-lg bg-gray-50 p-6">
           <h2 className="mb-4 text-lg font-semibold text-gray-900">
             Lead Progress Status
           </h2>
@@ -187,14 +196,14 @@ export function DashboardPageClient() {
               />
               <YAxis />
               <Tooltip />
-              <Bar dataKey="count" fill="#EA4335" />
+              <Bar dataKey="count" fill="#0e75bc" />
             </BarChart>
           </ResponsiveContainer>
         </div>
       </div>
 
       {/* Leads Over Time */}
-      <div className="mb-8 rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+      <div className="mb-8 rounded-lg bg-gray-50 p-6">
         <h2 className="mb-4 text-lg font-semibold text-gray-900">
           Leads Over Time (Last 30 Days)
         </h2>
@@ -207,9 +216,9 @@ export function DashboardPageClient() {
             <Line
               type="monotone"
               dataKey="count"
-              stroke="#EA4335"
+              stroke="#0e75bc"
               strokeWidth={2}
-              dot={{ fill: "#EA4335" }}
+              dot={{ fill: "#0e75bc" }}
             />
           </LineChart>
         </ResponsiveContainer>

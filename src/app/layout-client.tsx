@@ -57,31 +57,38 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
     pathname === href || pathname.startsWith(href + "/");
 
   return (
-    <div className="flex h-screen flex-col bg-gray-50">
+    <div
+      className="flex h-screen flex-col"
+      style={{ backgroundColor: "#0e75bc" }}
+    >
       {/* Top Header Bar - Full Width */}
-      <header className="flex h-16 items-center justify-between border-b bg-white px-4 shadow-sm">
+      <header
+        className="flex h-16 items-center px-4"
+        style={{ backgroundColor: "#0e75bc" }}
+      >
         <div className="flex items-center gap-3">
           {/* Hamburger Menu */}
           <button
             id="hamburger"
             onClick={() => setSidebarExpanded(!sidebarExpanded)}
-            className="cursor-pointer rounded-lg p-2 transition-colors hover:bg-gray-100"
+            className="cursor-pointer rounded-lg p-2 transition-colors hover:bg-blue-700"
           >
-            <Menu className="h-5 w-5 text-gray-600" />
+            <Menu className="h-5 w-5 text-white" />
           </button>
 
           {/* Logo and Brand */}
-          <Link href="/" className="flex items-center gap-2">
+          <Link href="/" className="flex items-center gap-3">
             <Image
               src="/logo.png"
               alt="Emalify Logo"
               width={140}
               height={140}
             />
+            <p className="text-lg font-semibold text-white">
+              Lead Management System
+            </p>
           </Link>
         </div>
-
-        <p className="text-sm text-gray-600">Lead Management System</p>
       </header>
 
       {/* Main Container with Sidebar and Content */}
@@ -90,9 +97,10 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
         <aside
           id="sidebar"
           className={cn(
-            "relative flex flex-col border-r bg-white transition-all duration-300",
+            "relative flex flex-col transition-all duration-300",
             sidebarExpanded ? "w-64" : "w-16",
           )}
+          style={{ backgroundColor: "#0e75bc" }}
           onMouseEnter={() => setSidebarExpanded(true)}
           onMouseLeave={() => setSidebarExpanded(false)}
         >
@@ -110,14 +118,19 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
                     "flex cursor-pointer items-center rounded-lg transition-all",
                     sidebarExpanded ? "px-3 py-2" : "justify-center p-3",
                     active
-                      ? "bg-red-50 text-red-700 hover:bg-red-100"
-                      : "text-gray-700 hover:bg-gray-100",
+                      ? "text-white"
+                      : "text-blue-100 hover:bg-blue-800/40",
                   )}
+                  style={
+                    active
+                      ? { backgroundColor: "rgba(255, 255, 255, 0.15)" }
+                      : {}
+                  }
                 >
                   <Icon
                     className={cn(
                       "h-5 w-5 shrink-0",
-                      active ? "text-red-600" : "text-gray-500",
+                      active ? "text-white" : "text-blue-100",
                     )}
                   />
                   <span
@@ -135,7 +148,7 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
         </aside>
 
         {/* Main Content Area */}
-        <main className="flex-1 overflow-auto bg-gray-50">{children}</main>
+        <main className="flex-1 overflow-auto bg-white">{children}</main>
       </div>
     </div>
   );

@@ -25,12 +25,12 @@ import WhatsappIcon from "./whatsapp-icon";
 import GoogleCalendarIcon from "./google-calendar-icon";
 
 const COLORS = {
-  "High Budget Lead": "#EA4335",
-  "Medium Budget Lead": "#FBBC04",
+  "High Budget Lead": "#0e75bc",
+  "Medium Budget Lead": "#fcd11f",
   "Low Budget Lead": "#34A853",
   "Form Submitted": "#4285F4",
-  "Demo Call Booked": "#EA4335",
-  "Potential Lead": "#FBBC04",
+  "Demo Call Booked": "#0e75bc",
+  "Potential Lead": "#fcd11f",
   Converted: "#34A853",
   "Dead Lead": "#9AA0A6",
 } as const;
@@ -144,7 +144,7 @@ export function LeadsPageClient() {
       </div>
 
       {/* Filters */}
-      <div className="mb-6 rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+      <div className="mb-6 rounded-lg bg-gray-50 p-6">
         <div className="mb-4 flex items-center gap-2">
           <Filter className="h-5 w-5 text-gray-600" />
           <h2 className="text-lg font-semibold text-gray-900">Filters</h2>
@@ -159,7 +159,19 @@ export function LeadsPageClient() {
                 placeholder="Name, email, company..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full rounded-lg border border-gray-300 py-2 pr-4 pl-10 text-sm focus:border-red-500 focus:ring-1 focus:ring-red-500 focus:outline-none"
+                className="w-full rounded-lg border border-gray-300 bg-white py-2 pr-4 pl-10 text-sm focus:outline-none"
+                style={{
+                  borderColor: "#0e75bc",
+                  boxShadow: "none",
+                }}
+                onFocus={(e) => {
+                  e.target.style.borderColor = "#0e75bc";
+                  e.target.style.boxShadow = "0 0 0 1px #0e75bc";
+                }}
+                onBlur={(e) => {
+                  e.target.style.borderColor = "#d1d5db";
+                  e.target.style.boxShadow = "none";
+                }}
               />
             </div>
           </div>
@@ -171,7 +183,10 @@ export function LeadsPageClient() {
             <select
               value={labelFilter}
               onChange={(e) => setLabelFilter(e.target.value)}
-              className="w-full cursor-pointer rounded-lg border border-gray-300 px-4 py-2 text-sm focus:border-red-500 focus:ring-1 focus:ring-red-500 focus:outline-none"
+              className="w-full cursor-pointer rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm focus:outline-none"
+              style={{
+                borderColor: "#0e75bc",
+              }}
             >
               <option value="">All Labels</option>
               <option value="High Budget Lead">High Budget</option>
@@ -185,7 +200,10 @@ export function LeadsPageClient() {
             <select
               value={progressFilter}
               onChange={(e) => setProgressFilter(e.target.value)}
-              className="w-full cursor-pointer rounded-lg border border-gray-300 px-4 py-2 text-sm focus:border-red-500 focus:ring-1 focus:ring-red-500 focus:outline-none"
+              className="w-full cursor-pointer rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm focus:outline-none"
+              style={{
+                borderColor: "#0e75bc",
+              }}
             >
               <option value="">All Progress</option>
               <option value="Form Submitted">Form Submitted</option>
@@ -204,7 +222,10 @@ export function LeadsPageClient() {
               type="date"
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
-              className="w-full cursor-pointer rounded-lg border border-gray-300 px-4 py-2 text-sm focus:border-red-500 focus:ring-1 focus:ring-red-500 focus:outline-none"
+              className="w-full cursor-pointer rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm focus:outline-none"
+              style={{
+                borderColor: "#0e75bc",
+              }}
             />
           </div>
 
@@ -214,14 +235,17 @@ export function LeadsPageClient() {
               type="date"
               value={endDate}
               onChange={(e) => setEndDate(e.target.value)}
-              className="w-full cursor-pointer rounded-lg border border-gray-300 px-4 py-2 text-sm focus:border-red-500 focus:ring-1 focus:ring-red-500 focus:outline-none"
+              className="w-full cursor-pointer rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm focus:outline-none"
+              style={{
+                borderColor: "#0e75bc",
+              }}
             />
           </div>
         </div>
       </div>
 
       {/* Leads Table */}
-      <div className="rounded-lg border border-gray-200 bg-white shadow-sm">
+      <div className="rounded-lg bg-gray-50">
         <div className="overflow-x-auto">
           {!leadsLoading && leads?.length === 0 && (
             <div className="py-12 text-center">
@@ -237,7 +261,7 @@ export function LeadsPageClient() {
             </div>
           ) : (
             <table className="w-full">
-              <thead className="bg-gray-50">
+              <thead className="bg-gray-100">
                 <tr>
                   <th className="px-3 py-2 text-left text-xs font-medium tracking-wider text-gray-600 uppercase">
                     Actions
@@ -284,6 +308,7 @@ export function LeadsPageClient() {
                           <div className="flex gap-2">
                             <button
                               onClick={handleSave}
+                              title="Save"
                               disabled={updateLead.isPending}
                               className="cursor-pointer rounded p-1 text-green-600 hover:bg-green-50 disabled:cursor-not-allowed disabled:opacity-50"
                             >
@@ -294,6 +319,7 @@ export function LeadsPageClient() {
                               )}
                             </button>
                             <button
+                              title="Cancel"
                               onClick={handleCancel}
                               className="cursor-pointer rounded p-1 text-gray-600 hover:bg-gray-50"
                             >
@@ -311,7 +337,8 @@ export function LeadsPageClient() {
                             </button>
                             <button
                               onClick={() => handleEdit(lead)}
-                              className="cursor-pointer rounded p-1 text-blue-600 hover:bg-blue-50"
+                              style={{ color: "#0e75bc" }}
+                              className="cursor-pointer rounded p-1 hover:bg-blue-50"
                             >
                               <Edit2 className="h-4 w-4" />
                             </button>
