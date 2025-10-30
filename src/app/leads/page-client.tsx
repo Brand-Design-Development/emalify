@@ -14,11 +14,14 @@ import {
   Trash2,
   Save,
   X,
+  Mail,
 } from "lucide-react";
 import { format } from "date-fns";
 import { api } from "@emalify/trpc/react";
 import type { Lead, LeadLabel, LeadProgress } from "@emalify/lib/types";
 import { LoadingSpinner } from "../components/loading-spinner";
+import WhatsappIcon from "./whatsapp-icon";
+import GoogleCalendarIcon from "./google-calendar-icon";
 
 const COLORS = {
   "High Budget Lead": "#EA4335",
@@ -213,32 +216,32 @@ export function LeadsPageClient() {
             <table className="w-full">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-600 uppercase">
+                  <th className="px-3 py-2 text-left text-xs font-medium tracking-wider text-gray-600 uppercase">
+                    Actions
+                  </th>
+                  <th className="px-3 py-2 text-left text-xs font-medium tracking-wider text-gray-600 uppercase">
                     Name
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-600 uppercase">
+                  <th className="px-3 py-2 text-left text-xs font-medium tracking-wider text-gray-600 uppercase">
                     Email
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-600 uppercase">
+                  <th className="px-3 py-2 text-left text-xs font-medium tracking-wider text-gray-600 uppercase">
                     Phone
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-600 uppercase">
+                  <th className="px-3 py-2 text-left text-xs font-medium tracking-wider text-gray-600 uppercase">
                     Company
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-600 uppercase">
+                  <th className="px-3 py-2 text-left text-xs font-medium tracking-wider text-gray-600 uppercase">
                     Position
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-600 uppercase">
+                  <th className="px-3 py-2 text-left text-xs font-medium tracking-wider text-gray-600 uppercase">
                     Label
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-600 uppercase">
+                  <th className="px-3 py-2 text-left text-xs font-medium tracking-wider text-gray-600 uppercase">
                     Progress
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-600 uppercase">
+                  <th className="px-3 py-2 text-left text-xs font-medium tracking-wider text-gray-600 uppercase">
                     Date
-                  </th>
-                  <th className="px-6 py-3 text-right text-xs font-medium tracking-wider text-gray-600 uppercase">
-                    Actions
                   </th>
                 </tr>
               </thead>
@@ -253,7 +256,42 @@ export function LeadsPageClient() {
 
                   return (
                     <tr key={lead.id} className="hover:bg-gray-50">
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-3 py-2 whitespace-nowrap">
+                        {isEditing ? (
+                          <div className="flex gap-2">
+                            <button
+                              onClick={handleSave}
+                              disabled={updateLead.isPending}
+                              className="cursor-pointer rounded p-1 text-green-600 hover:bg-green-50 disabled:cursor-not-allowed disabled:opacity-50"
+                            >
+                              <Save className="h-4 w-4" />
+                            </button>
+                            <button
+                              onClick={handleCancel}
+                              className="cursor-pointer rounded p-1 text-gray-600 hover:bg-gray-50"
+                            >
+                              <X className="h-4 w-4" />
+                            </button>
+                          </div>
+                        ) : (
+                          <div className="flex gap-2">
+                            <button
+                              onClick={() => handleEdit(lead)}
+                              className="cursor-pointer rounded p-1 text-blue-600 hover:bg-blue-50"
+                            >
+                              <Edit2 className="h-4 w-4" />
+                            </button>
+                            <button
+                              onClick={() => handleDelete(lead.id)}
+                              disabled={deleteLead.isPending}
+                              className="cursor-pointer rounded p-1 text-red-600 hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </button>
+                          </div>
+                        )}
+                      </td>
+                      <td className="px-3 py-2">
                         {isEditing ? (
                           <input
                             type="text"
@@ -272,7 +310,7 @@ export function LeadsPageClient() {
                           </div>
                         )}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-3 py-2">
                         {isEditing ? (
                           <input
                             type="email"
@@ -286,12 +324,30 @@ export function LeadsPageClient() {
                             className="w-full rounded border border-gray-300 px-2 py-1 text-sm"
                           />
                         ) : (
-                          <div className="text-sm text-gray-600">
-                            {lead.email}
+                          <div className="flex items-center gap-2">
+                            <span className="text-sm text-gray-600">
+                              {lead.email}
+                            </span>
+                            <a
+                              href={`mailto:${lead.email}?subject=Request for Emalify Demo`}
+                              className="text-blue-600 hover:text-blue-800"
+                              title="Send Email"
+                            >
+                              <Mail className="h-4 w-4" />
+                            </a>
+                            <a
+                              href={`https://calendar.google.com/calendar/render?action=TEMPLATE&text=Emalify Demo&add=${encodeURIComponent(lead.email)}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-blue-600 hover:text-blue-800"
+                              title="Schedule Meeting"
+                            >
+                              <GoogleCalendarIcon className="h-4 w-4" />
+                            </a>
                           </div>
                         )}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-3 py-2 whitespace-nowrap">
                         {isEditing ? (
                           <input
                             type="text"
@@ -305,12 +361,30 @@ export function LeadsPageClient() {
                             className="w-full rounded border border-gray-300 px-2 py-1 text-sm"
                           />
                         ) : (
-                          <div className="text-sm text-gray-600">
-                            {lead.phoneNumber}
+                          <div className="flex items-center gap-2">
+                            <span className="text-sm text-gray-600">
+                              {lead.phoneNumber}
+                            </span>
+                            <a
+                              href={`tel:${lead.phoneNumber}`}
+                              className="text-blue-600 hover:text-blue-800"
+                              title="Call"
+                            >
+                              <Phone className="h-4 w-4" />
+                            </a>
+                            <a
+                              href={`https://wa.me/${lead.phoneNumber.replace(/\D/g, "")}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-green-600 hover:text-green-800"
+                              title="WhatsApp"
+                            >
+                              <WhatsappIcon className="h-5 w-5" />
+                            </a>
                           </div>
                         )}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-3 py-2">
                         {isEditing ? (
                           <input
                             type="text"
@@ -329,7 +403,7 @@ export function LeadsPageClient() {
                           </div>
                         )}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-3 py-2">
                         {isEditing ? (
                           <input
                             type="text"
@@ -348,7 +422,7 @@ export function LeadsPageClient() {
                           </div>
                         )}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-3 py-2 whitespace-nowrap">
                         {isEditing ? (
                           <select
                             value={editForm.label || ""}
@@ -380,7 +454,7 @@ export function LeadsPageClient() {
                           </span>
                         )}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-3 py-2 whitespace-nowrap">
                         {isEditing ? (
                           <select
                             value={editForm.progress || ""}
@@ -423,43 +497,8 @@ export function LeadsPageClient() {
                           </div>
                         )}
                       </td>
-                      <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-600">
+                      <td className="px-3 py-2 text-sm whitespace-nowrap text-gray-600">
                         {format(new Date(lead.submissionDate), "MMM dd, yyyy")}
-                      </td>
-                      <td className="px-6 py-4 text-right text-sm whitespace-nowrap">
-                        {isEditing ? (
-                          <div className="flex justify-end gap-2">
-                            <button
-                              onClick={handleSave}
-                              disabled={updateLead.isPending}
-                              className="cursor-pointer rounded p-1 text-green-600 hover:bg-green-50 disabled:cursor-not-allowed disabled:opacity-50"
-                            >
-                              <Save className="h-4 w-4" />
-                            </button>
-                            <button
-                              onClick={handleCancel}
-                              className="cursor-pointer rounded p-1 text-gray-600 hover:bg-gray-50"
-                            >
-                              <X className="h-4 w-4" />
-                            </button>
-                          </div>
-                        ) : (
-                          <div className="flex justify-end gap-2">
-                            <button
-                              onClick={() => handleEdit(lead)}
-                              className="cursor-pointer rounded p-1 text-blue-600 hover:bg-blue-50"
-                            >
-                              <Edit2 className="h-4 w-4" />
-                            </button>
-                            <button
-                              onClick={() => handleDelete(lead.id)}
-                              disabled={deleteLead.isPending}
-                              className="cursor-pointer rounded p-1 text-red-600 hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50"
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </button>
-                          </div>
-                        )}
                       </td>
                     </tr>
                   );

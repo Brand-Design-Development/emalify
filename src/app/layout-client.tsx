@@ -81,7 +81,7 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
           </Link>
         </div>
 
-        <p className="text-sm text-gray-600">Lead Management Dashboard</p>
+        <p className="text-sm text-gray-600">Lead Management System</p>
       </header>
 
       {/* Main Container with Sidebar and Content */}
