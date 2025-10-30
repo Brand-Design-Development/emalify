@@ -1,11 +1,18 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
+set -e
 
 # Sample leads data for testing the Emalify Lead Management System
 
+# Use environment variable or default to localhost:3000
+EMALIFY_HOME_URL=${EMALIFY_HOME_URL:-http://localhost:3000}
+
 echo "Adding sample leads to the database..."
+echo "Using URL: $EMALIFY_HOME_URL"
+echo ""
 
 # Lead 1 - High Budget
-curl -X POST http://localhost:3000/api/lead/new \
+curl -X POST $EMALIFY_HOME_URL/api/lead/new \
   -H "Content-Type: application/json" \
   -d '{
     "Full Name": "Sarah Johnson",
@@ -23,7 +30,7 @@ curl -X POST http://localhost:3000/api/lead/new \
 echo -e "\n\nLead 1 added"
 
 # Lead 2 - Medium Budget
-curl -X POST http://localhost:3000/api/lead/new \
+curl -X POST $EMALIFY_HOME_URL/api/lead/new \
   -H "Content-Type: application/json" \
   -d '{
     "Full Name": "Michael Chen",
@@ -41,7 +48,7 @@ curl -X POST http://localhost:3000/api/lead/new \
 echo -e "\n\nLead 2 added"
 
 # Lead 3 - High Budget
-curl -X POST http://localhost:3000/api/lead/new \
+curl -X POST $EMALIFY_HOME_URL/api/lead/new \
   -H "Content-Type: application/json" \
   -d '{
     "Full Name": "Emily Rodriguez",
@@ -59,7 +66,7 @@ curl -X POST http://localhost:3000/api/lead/new \
 echo -e "\n\nLead 3 added"
 
 # Lead 4 - Low Budget
-curl -X POST http://localhost:3000/api/lead/new \
+curl -X POST $EMALIFY_HOME_URL/api/lead/new \
   -H "Content-Type: application/json" \
   -d '{
     "Full Name": "David Kim",
@@ -77,7 +84,7 @@ curl -X POST http://localhost:3000/api/lead/new \
 echo -e "\n\nLead 4 added"
 
 # Lead 5 - Medium Budget
-curl -X POST http://localhost:3000/api/lead/new \
+curl -X POST $EMALIFY_HOME_URL/api/lead/new \
   -H "Content-Type: application/json" \
   -d '{
     "Full Name": "Jessica Martinez",
@@ -95,7 +102,7 @@ curl -X POST http://localhost:3000/api/lead/new \
 echo -e "\n\nLead 5 added"
 
 # Lead 6 - High Budget
-curl -X POST http://localhost:3000/api/lead/new \
+curl -X POST $EMALIFY_HOME_URL/api/lead/new \
   -H "Content-Type: application/json" \
   -d '{
     "Full Name": "Robert Anderson",
@@ -113,7 +120,7 @@ curl -X POST http://localhost:3000/api/lead/new \
 echo -e "\n\nLead 6 added"
 
 # Lead 7 - Dead Lead
-curl -X POST http://localhost:3000/api/lead/new \
+curl -X POST $EMALIFY_HOME_URL/api/lead/new \
   -H "Content-Type: application/json" \
   -d '{
     "Full Name": "Lisa Thompson",
@@ -131,7 +138,7 @@ curl -X POST http://localhost:3000/api/lead/new \
 echo -e "\n\nLead 7 added"
 
 # Lead 8 - Converted
-curl -X POST http://localhost:3000/api/lead/new \
+curl -X POST $EMALIFY_HOME_URL/api/lead/new \
   -H "Content-Type: application/json" \
   -d '{
     "Full Name": "James Wilson",
@@ -149,7 +156,7 @@ curl -X POST http://localhost:3000/api/lead/new \
 echo -e "\n\nLead 8 added"
 
 # Lead 9 - Form Submitted
-curl -X POST http://localhost:3000/api/lead/new \
+curl -X POST $EMALIFY_HOME_URL/api/lead/new \
   -H "Content-Type: application/json" \
   -d '{
     "Full Name": "Amanda Lee",
@@ -167,7 +174,7 @@ curl -X POST http://localhost:3000/api/lead/new \
 echo -e "\n\nLead 9 added"
 
 # Lead 10 - Potential Lead
-curl -X POST http://localhost:3000/api/lead/new \
+curl -X POST $EMALIFY_HOME_URL/api/lead/new \
   -H "Content-Type: application/json" \
   -d '{
     "Full Name": "Christopher Brown",
@@ -185,4 +192,4 @@ curl -X POST http://localhost:3000/api/lead/new \
 echo -e "\n\nLead 10 added"
 
 echo -e "\n\n✅ All sample leads have been added!"
-echo "You can now view them at http://localhost:3000"
+echo "You can now view them at $EMALIFY_HOME_URL"
