@@ -47,13 +47,13 @@ export function DashboardPageClient() {
       name: stat.label.replace(" Budget Lead", ""),
       value: stat.count,
       fullName: stat.label,
-    })) || [];
+    })) ?? [];
 
   const progressChartData =
     stats?.progressStats.map((stat) => ({
       name: stat.progress,
       count: stat.count,
-    })) || [];
+    })) ?? [];
 
   // Group leads by date for line chart
   const leadsOverTimeData =
@@ -97,7 +97,7 @@ export function DashboardPageClient() {
 
   // Conversion Funnel Data - showing actual progression
   // Calculate percentages relative to total leads (not first stage)
-  const totalLeadsCount = stats?.totalLeads || 1;
+  const totalLeadsCount = stats?.totalLeads ?? 1;
   const funnelData = [
     {
       name: "Form Submitted",
@@ -192,7 +192,7 @@ export function DashboardPageClient() {
             <div>
               <p className="text-sm text-gray-600">Total Leads</p>
               <p className="mt-2 text-3xl font-semibold text-gray-900">
-                {stats?.totalLeads || 0}
+                {stats?.totalLeads ?? 0}
               </p>
             </div>
             <div
