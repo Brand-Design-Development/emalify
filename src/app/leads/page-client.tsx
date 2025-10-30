@@ -350,7 +350,7 @@ export function LeadsPageClient() {
                           {isEditing ? (
                             <input
                               type="text"
-                              value={editForm.fullName || ""}
+                              value={editForm.fullName ?? ""}
                               onChange={(e) =>
                                 setEditForm({
                                   ...editForm,
@@ -370,7 +370,7 @@ export function LeadsPageClient() {
                           {isEditing ? (
                             <input
                               type="email"
-                              value={editForm.email || ""}
+                              value={editForm.email ?? ""}
                               onChange={(e) =>
                                 setEditForm({
                                   ...editForm,
@@ -393,7 +393,7 @@ export function LeadsPageClient() {
                                 <Mail className="h-4 w-4" />
                               </a>
                               <a
-                                href={`https://calendar.google.com/calendar/render?action=TEMPLATE&text=Emalify Demo&add=${encodeURIComponent(lead.email)}`}
+                                href={`https://calendar.google.com/calendar/render?action=TEMPLATE&text=Emalify Demo&add=${encodeURIComponent(lead.email ?? "")}`}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="text-blue-600 hover:text-blue-800"
@@ -408,7 +408,7 @@ export function LeadsPageClient() {
                           {isEditing ? (
                             <input
                               type="text"
-                              value={editForm.phoneNumber || ""}
+                              value={editForm.phoneNumber ?? ""}
                               onChange={(e) =>
                                 setEditForm({
                                   ...editForm,
@@ -431,7 +431,7 @@ export function LeadsPageClient() {
                                 <Phone className="h-4 w-4" />
                               </a>
                               <a
-                                href={`https://wa.me/${lead.phoneNumber.replace(/\D/g, "")}`}
+                                href={`https://wa.me/${(lead.phoneNumber ?? "").replace(/\D/g, "")}`}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="text-green-600 hover:text-green-800"
@@ -446,7 +446,7 @@ export function LeadsPageClient() {
                           {isEditing ? (
                             <input
                               type="text"
-                              value={editForm.company || ""}
+                              value={editForm.company ?? ""}
                               onChange={(e) =>
                                 setEditForm({
                                   ...editForm,
@@ -466,7 +466,7 @@ export function LeadsPageClient() {
                           {isEditing ? (
                             <input
                               type="text"
-                              value={editForm.currentPosition || ""}
+                              value={editForm.currentPosition ?? ""}
                               onChange={(e) =>
                                 setEditForm({
                                   ...editForm,
@@ -485,7 +485,7 @@ export function LeadsPageClient() {
                         <td className="px-3 py-2 whitespace-nowrap">
                           {isEditing ? (
                             <select
-                              value={editForm.label || ""}
+                              value={editForm.label ?? ""}
                               onChange={(e) =>
                                 setEditForm({
                                   ...editForm,
@@ -509,19 +509,20 @@ export function LeadsPageClient() {
                             <span
                               className="inline-flex rounded-full px-2 py-1 text-xs font-semibold"
                               style={{
-                                backgroundColor: `${COLORS[lead.label as keyof typeof COLORS]}20`,
+                                backgroundColor: `${COLORS[lead.label as keyof typeof COLORS] ?? "#000000"}20`,
                                 color:
-                                  COLORS[lead.label as keyof typeof COLORS],
+                                  COLORS[lead.label as keyof typeof COLORS] ??
+                                  "#000000",
                               }}
                             >
-                              {lead.label.replace(" Budget Lead", "")}
+                              {(lead.label ?? "").replace(" Budget Lead", "")}
                             </span>
                           )}
                         </td>
                         <td className="px-3 py-2 whitespace-nowrap">
                           {isEditing ? (
                             <select
-                              value={editForm.progress || ""}
+                              value={editForm.progress ?? ""}
                               onChange={(e) =>
                                 setEditForm({
                                   ...editForm,
@@ -552,7 +553,7 @@ export function LeadsPageClient() {
                                     color:
                                       COLORS[
                                         lead.progress as keyof typeof COLORS
-                                      ],
+                                      ] ?? "#000000",
                                   }}
                                 />
                               )}

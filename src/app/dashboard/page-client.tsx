@@ -2,21 +2,14 @@
 
 import {
   Users,
-  TrendingUp,
   CheckCircle,
   DollarSign,
-  Clock,
   Target,
   PhoneCall,
-  UserCheck,
-  AlertCircle,
-  XCircle,
 } from "lucide-react";
 import {
   BarChart,
   Bar,
-  LineChart,
-  Line,
   PieChart,
   Pie,
   Cell,
@@ -29,17 +22,10 @@ import {
   Area,
   AreaChart,
   ComposedChart,
-  RadarChart,
-  PolarGrid,
-  PolarAngleAxis,
-  PolarRadiusAxis,
-  Radar,
-  Funnel,
-  FunnelChart,
+  Line,
 } from "recharts";
-import { format, subDays, startOfDay, differenceInDays } from "date-fns";
+import { format, subDays, startOfDay } from "date-fns";
 import { api } from "@emalify/trpc/react";
-import { LoadingSpinner } from "../components/loading-spinner";
 
 const COLORS = {
   "High Budget Lead": "#0e75bc",
@@ -73,19 +59,22 @@ export function DashboardPageClient() {
 
   // Group leads by date for line chart
   const leadsOverTimeData =
-    stats?.leadsOverTime.reduce((acc: any[], lead) => {
-      const dateStr = format(new Date(lead.submissionDate), "MMM dd");
-      const existing = acc.find((item) => item.date === dateStr);
-      if (existing) {
-        existing.count++;
-      } else {
-        acc.push({ date: dateStr, count: 1 });
-      }
-      return acc;
-    }, []) || [];
+    stats?.leadsOverTime.reduce(
+      (acc: Array<{ date: string; count: number }>, lead) => {
+        const dateStr = format(new Date(lead.submissionDate), "MMM dd");
+        const existing = acc.find((item) => item.date === dateStr);
+        if (existing) {
+          existing.count++;
+        } else {
+          acc.push({ date: dateStr, count: 1 });
+        }
+        return acc;
+      },
+      [],
+    ) ?? [];
 
   const totalConverted =
-    stats?.progressStats.find((s) => s.progress === "Converted")?.count || 0;
+    stats?.progressStats.find((s) => s.progress === "Converted")?.count ?? 0;
   const conversionRate = stats?.totalLeads
     ? ((totalConverted / stats.totalLeads) * 100).toFixed(1)
     : "0";
@@ -93,17 +82,17 @@ export function DashboardPageClient() {
   // Calculate additional metrics
   const demoCallBooked =
     stats?.progressStats.find((s) => s.progress === "Demo Call Booked")
-      ?.count || 0;
+      ?.count ?? 0;
   const potentialLeads =
-    stats?.progressStats.find((s) => s.progress === "Potential Lead")?.count ||
+    stats?.progressStats.find((s) => s.progress === "Potential Lead")?.count ??
     0;
   const deadLeads =
-    stats?.progressStats.find((s) => s.progress === "Dead Lead")?.count || 0;
+    stats?.progressStats.find((s) => s.progress === "Dead Lead")?.count ?? 0;
   const formSubmitted =
-    stats?.progressStats.find((s) => s.progress === "Form Submitted")?.count ||
+    stats?.progressStats.find((s) => s.progress === "Form Submitted")?.count ??
     0;
 
-  const activeLeads = (stats?.totalLeads || 0) - deadLeads;
+  const activeLeads = (stats?.totalLeads ?? 0) - deadLeads;
   const demoToConversionRate = demoCallBooked
     ? ((totalConverted / demoCallBooked) * 100).toFixed(1)
     : "0";
@@ -280,14 +269,14 @@ export function DashboardPageClient() {
               <p className="text-sm text-gray-600">High Budget</p>
               <p className="mt-2 text-3xl font-semibold text-gray-900">
                 {stats?.labelStats.find((s) => s.label === "High Budget Lead")
-                  ?.count || 0}
+                  ?.count ?? 0}
               </p>
               <p className="mt-1 text-xs text-gray-500">
                 {(
                   ((stats?.labelStats.find(
                     (s) => s.label === "High Budget Lead",
-                  )?.count || 0) /
-                    (stats?.totalLeads || 1)) *
+                  )?.count ?? 0) /
+                    (stats?.totalLeads ?? 1)) *
                   100
                 ).toFixed(0)}
                 % of total
@@ -389,8 +378,8 @@ export function DashboardPageClient() {
                 cx="50%"
                 cy="50%"
                 labelLine={false}
-                label={(entry: any) =>
-                  `${entry.name} (${(entry.percent * 100).toFixed(0)}%)`
+                label={(props) =>
+                  `${props.name!} (${(((props.percent as number | undefined) ?? 0) * 100).toFixed(0)}%)`
                 }
                 outerRadius={80}
                 fill="#8884d8"

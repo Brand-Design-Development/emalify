@@ -1,12 +1,8 @@
 import { z } from "zod";
+import type { Prisma } from "@prisma/client";
 
 import { createTRPCRouter, publicProcedure } from "@emalify/server/api/trpc";
-import {
-  LeadLabels,
-  LeadLabelZod,
-  LeadProgressZod,
-  LeadProgresses,
-} from "@emalify/lib/types";
+import { LeadLabelZod, LeadProgressZod } from "@emalify/lib/types";
 
 export const leadRouter = createTRPCRouter({
   // Get all leads with optional filters
@@ -21,7 +17,7 @@ export const leadRouter = createTRPCRouter({
       }),
     )
     .query(async ({ ctx, input }) => {
-      const where: any = {};
+      const where: Prisma.LeadWhereInput = {};
 
       if (input.label) {
         where.label = input.label;
@@ -39,7 +35,7 @@ export const leadRouter = createTRPCRouter({
         ];
       }
 
-      if (input.startDate || input.endDate) {
+      if (input.startDate ?? input.endDate) {
         where.submissionDate = {};
         if (input.startDate) {
           where.submissionDate.gte = new Date(input.startDate);

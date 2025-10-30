@@ -1,12 +1,7 @@
 import { NextResponse } from "next/server";
 import { db } from "@emalify/server/db";
 import { z } from "zod";
-import {
-  LeadLabels,
-  LeadLabelZod,
-  LeadProgresses,
-  LeadProgressZod,
-} from "@emalify/lib/types";
+import { LeadLabelZod, LeadProgressZod } from "@emalify/lib/types";
 
 const leadSchema = z.object({
   "Full Name": z.string(),
@@ -23,7 +18,7 @@ const leadSchema = z.object({
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
+    const body: unknown = await request.json();
 
     const validatedData = leadSchema.parse(body);
 
