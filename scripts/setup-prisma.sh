@@ -8,7 +8,7 @@ if [ -d "prisma/migrations" ] && [ "$(ls -A prisma/migrations)" ]; then
   npx prisma migrate deploy
 else
   echo "No migrations found — running prisma db push"
-  npx prisma db push
+  npx prisma db push --accept-data-loss
 fi
 
 echo "Prisma setup complete"
