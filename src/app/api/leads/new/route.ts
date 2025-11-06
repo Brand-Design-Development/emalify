@@ -1,11 +1,7 @@
 import { NextResponse } from "next/server";
 import { db } from "@emalify/server/db";
 import { z } from "zod";
-import {
-  LeadProgressZod,
-  type LeadLabel,
-  type LeadProgress,
-} from "@emalify/lib/types";
+import { LeadProgressZod, type LeadLabel } from "@emalify/lib/types";
 import { verifyApiKey } from "@emalify/lib/api-auth";
 import { sendNewLeadNotification } from "@emalify/lib/email";
 

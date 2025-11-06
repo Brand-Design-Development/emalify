@@ -1,16 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import {
-  UserCog,
-  Edit2,
-  Trash2,
-  Save,
-  X,
-  Plus,
-  Mail,
-  User,
-} from "lucide-react";
+import { UserCog, Edit2, Trash2, Save, X, Plus } from "lucide-react";
 import { format } from "date-fns";
 import { api } from "@emalify/trpc/react";
 import { LoadingSpinner } from "../components/loading-spinner";
@@ -168,19 +159,19 @@ export function AdminsPageClient() {
               <table className="w-full">
                 <thead className="sticky top-0 z-10 bg-gray-100">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-600 uppercase">
+                    <th className="px-3 py-2 text-left text-xs font-medium tracking-wider text-gray-600 uppercase">
                       Actions
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-600 uppercase">
+                    <th className="px-3 py-2 text-left text-xs font-medium tracking-wider text-gray-600 uppercase">
                       Full Name
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-600 uppercase">
+                    <th className="px-3 py-2 text-left text-xs font-medium tracking-wider text-gray-600 uppercase">
                       Email
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-600 uppercase">
+                    <th className="px-3 py-2 text-left text-xs font-medium tracking-wider text-gray-600 uppercase">
                       Created At
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-600 uppercase">
+                    <th className="px-3 py-2 text-left text-xs font-medium tracking-wider text-gray-600 uppercase">
                       Updated At
                     </th>
                   </tr>
@@ -192,7 +183,7 @@ export function AdminsPageClient() {
 
                     return (
                       <tr key={admin.id} className="hover:bg-gray-50">
-                        <td className="px-6 py-4 whitespace-nowrap">
+                        <td className="px-3 py-2 whitespace-nowrap">
                           {isEditing ? (
                             <div className="flex gap-2">
                               <button
@@ -236,7 +227,7 @@ export function AdminsPageClient() {
                             </div>
                           )}
                         </td>
-                        <td className="px-6 py-4">
+                        <td className="px-3 py-2">
                           {isEditing ? (
                             <input
                               type="text"
@@ -252,15 +243,12 @@ export function AdminsPageClient() {
                               placeholder="Full Name"
                             />
                           ) : (
-                            <div className="flex items-center gap-2">
-                              <User className="h-4 w-4 text-gray-400" />
-                              <span className="text-sm font-medium text-gray-900">
-                                {admin.fullName}
-                              </span>
+                            <div className="text-sm font-medium text-gray-900">
+                              {admin.fullName}
                             </div>
                           )}
                         </td>
-                        <td className="px-6 py-4">
+                        <td className="px-3 py-2">
                           {isEditing ? (
                             <input
                               type="email"
@@ -276,18 +264,15 @@ export function AdminsPageClient() {
                               placeholder="email@example.com"
                             />
                           ) : (
-                            <div className="flex items-center gap-2">
-                              <Mail className="h-4 w-4 text-gray-400" />
-                              <span className="text-sm text-gray-600">
-                                {admin.email}
-                              </span>
+                            <div className="text-sm text-gray-600">
+                              {admin.email}
                             </div>
                           )}
                         </td>
-                        <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-600">
+                        <td className="px-3 py-2 text-sm whitespace-nowrap text-gray-600">
                           {format(new Date(admin.createdAt), "MMM dd, yyyy")}
                         </td>
-                        <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-600">
+                        <td className="px-3 py-2 text-sm whitespace-nowrap text-gray-600">
                           {format(new Date(admin.updatedAt), "MMM dd, yyyy")}
                         </td>
                       </tr>
