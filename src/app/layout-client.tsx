@@ -10,6 +10,7 @@ import {
   RefreshCw,
   LogOut,
   Loader2,
+  UserCog,
 } from "lucide-react";
 import { cn } from "@emalify/lib/utils";
 import Image from "next/image";
@@ -29,6 +30,11 @@ const sidebarItems = [
     name: "Leads",
     href: "/leads",
     icon: Users,
+  },
+  {
+    name: "Admins",
+    href: "/admins",
+    icon: UserCog,
   },
 ];
 

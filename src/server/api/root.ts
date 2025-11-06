@@ -1,5 +1,6 @@
 import { leadRouter } from "@emalify/server/api/routers/lead";
 import { authRouter } from "@emalify/server/api/routers/auth";
+import { adminRouter } from "@emalify/server/api/routers/admin";
 import {
   createCallerFactory,
   createTRPCRouter,
@@ -13,6 +14,7 @@ import {
 export const appRouter = createTRPCRouter({
   lead: leadRouter,
   auth: authRouter,
+  admin: adminRouter,
 });
 
 // export type definition of API
