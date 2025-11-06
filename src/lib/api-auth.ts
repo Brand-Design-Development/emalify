@@ -7,7 +7,7 @@ import { NextResponse } from "next/server";
  * @param request - The incoming request object
  * @returns NextResponse with error if invalid, null if valid
  */
-export function verifyApiKey(request: Request): NextResponse | null {
+export function verifyApiKey(request: Request){
   const apiKey = request.headers.get("x-api-key");
 
   if (!apiKey) {

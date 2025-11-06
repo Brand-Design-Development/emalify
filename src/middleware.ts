@@ -1,12 +1,21 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { env } from "@emalify/env";
+import { verifyApiKey } from "./lib/api-auth";
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Allow public access to login page and API routes
-  if (pathname === "/login" || pathname.startsWith("/api/")) {
+  // Verify API key for public API endpoints
+  if (pathname.startsWith("/api/")) {
+    const response = verifyApiKey(request);
+    if (response) {
+      return response;
+    }
+    return NextResponse.next();
+  }
+
+  if (pathname === "/login") {
     return NextResponse.next();
   }
 

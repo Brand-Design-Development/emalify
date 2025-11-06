@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import { db } from "@emalify/server/db";
 import { z } from "zod";
 import { LeadProgressZod, type LeadLabel } from "@emalify/lib/types";
-import { verifyApiKey } from "@emalify/lib/api-auth";
 import { sendNewLeadNotification } from "@emalify/lib/email";
 
 const leadSchema = z.object({
@@ -52,12 +51,6 @@ function parseLeadLabel({ min }: Range): LeadLabel {
 }
 
 export async function POST(request: Request) {
-  // Verify API key
-  const authError = verifyApiKey(request);
-  if (authError) {
-    return authError;
-  }
-
   try {
     const body: unknown = await request.json();
 
