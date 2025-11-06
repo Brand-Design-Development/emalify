@@ -19,8 +19,13 @@ export const leadRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       const where: Prisma.LeadWhereInput = {};
 
-      if (input.label) {
-        where.label = input.label;
+      if (input.label !== undefined) {
+        // Handle filtering by null labels (when user selects "No Label")
+        if (input.label === "null") {
+          where.label = null;
+        } else if (input.label !== "") {
+          where.label = input.label;
+        }
       }
 
       if (input.progress) {
@@ -72,7 +77,7 @@ export const leadRouter = createTRPCRouter({
         phoneNumber: z.string().optional(),
         company: z.string().optional(),
         currentPosition: z.string().optional(),
-        label: LeadLabelZod.optional(),
+        label: LeadLabelZod.optional().nullable(),
         progress: LeadProgressZod.optional(),
       }),
     )

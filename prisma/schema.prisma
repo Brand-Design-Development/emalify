@@ -18,10 +18,8 @@ model Lead {
     company         String
     currentPosition String
     submissionDate  DateTime
-    label           String // "High Budget Lead" | "Medium Budget Lead" | "Low Budget Lead"
+    label           String? // "High Budget Lead" | "Medium Budget Lead" | "Low Budget Lead"
     progress        String // "Form Submitted" | "Demo Call Booked" | "Dead Lead" | "Potential Lead" | "Converted"
-    threadId        String   @unique
-    formMode        String
     createdAt       DateTime @default(now())
     updatedAt       DateTime @updatedAt
 

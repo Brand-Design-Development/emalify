@@ -20,7 +20,7 @@ export function verifyApiKey(request: Request): NextResponse | null {
     );
   }
 
-  if (apiKey !== env.API_KEY) {
+  if (apiKey !== env.EMALIFY_LMS_API_KEY) {
     return NextResponse.json({ error: "Invalid API key" }, { status: 403 });
   }
 

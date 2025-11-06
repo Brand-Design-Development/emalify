@@ -15,7 +15,7 @@ export const env = createEnv({
     SESSION_COOKIE_NAME: z.string().default("emalify_lms_session"),
     SESSION_DURATION_DAYS: z.coerce.number().default(30),
     CRON_SECRET: z.string().min(1),
-    API_KEY: z.string().min(1),
+    EMALIFY_LMS_API_KEY: z.string().min(1),
   },
 
   /**
@@ -38,7 +38,7 @@ export const env = createEnv({
     SESSION_COOKIE_NAME: process.env.SESSION_COOKIE_NAME,
     SESSION_DURATION_DAYS: process.env.SESSION_DURATION_DAYS,
     CRON_SECRET: process.env.CRON_SECRET,
-    API_KEY: process.env.API_KEY,
+    EMALIFY_LMS_API_KEY: process.env.EMALIFY_LMS_API_KEY,
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   },
   /**

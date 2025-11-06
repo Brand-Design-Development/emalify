@@ -25,7 +25,7 @@ export type Lead = {
   company: string;
   currentPosition: string;
   submissionDate: Date;
-  label: LeadLabel;
+  label: LeadLabel | null;
   progress: LeadProgress;
   threadId: string;
   formMode: string;

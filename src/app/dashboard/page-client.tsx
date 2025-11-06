@@ -46,11 +46,13 @@ export function DashboardPageClient() {
 
   // Prepare data for charts
   const labelChartData =
-    stats?.labelStats.map((stat) => ({
-      name: stat.label.replace(" Budget Lead", ""),
-      value: stat.count,
-      fullName: stat.label,
-    })) ?? [];
+    stats?.labelStats
+      .filter((stat) => stat.label !== null)
+      .map((stat) => ({
+        name: stat.label!.replace(" Budget Lead", ""),
+        value: stat.count,
+        fullName: stat.label!,
+      })) ?? [];
 
   const progressChartData =
     stats?.progressStats.map((stat) => ({
@@ -165,23 +167,25 @@ export function DashboardPageClient() {
   });
 
   // Budget performance analysis
-  const budgetPerformance = stats?.labelStats.map((stat) => {
-    const leadsForLabel = stats.leadsOverTime.filter(
-      (l) => l.label === stat.label,
-    );
-    const convertedCount = leadsForLabel.filter(
-      (l) => l.progress === "Converted",
-    ).length;
-    const convRate =
-      stat.count > 0 ? ((convertedCount / stat.count) * 100).toFixed(1) : "0";
+  const budgetPerformance = stats?.labelStats
+    .filter((stat) => stat.label !== null)
+    .map((stat) => {
+      const leadsForLabel = stats.leadsOverTime.filter(
+        (l) => l.label === stat.label,
+      );
+      const convertedCount = leadsForLabel.filter(
+        (l) => l.progress === "Converted",
+      ).length;
+      const convRate =
+        stat.count > 0 ? ((convertedCount / stat.count) * 100).toFixed(1) : "0";
 
-    return {
-      label: stat.label.replace(" Budget Lead", ""),
-      total: stat.count,
-      converted: convertedCount,
-      conversionRate: parseFloat(convRate),
-    };
-  });
+      return {
+        label: stat.label!.replace(" Budget Lead", ""),
+        total: stat.count,
+        converted: convertedCount,
+        conversionRate: parseFloat(convRate),
+      };
+    });
 
   // Progress breakdown with percentages
   const progressBreakdown = stats?.progressStats.map((stat) => ({
