@@ -12,6 +12,7 @@ export const LeadLabels = [
   "High Budget Lead",
   "Medium Budget Lead",
   "Low Budget Lead",
+  "No Label",
 ] as const;
 
 export type LeadProgress = (typeof LeadProgresses)[number];
@@ -25,7 +26,7 @@ export type Lead = {
   company: string;
   currentPosition: string;
   submissionDate: Date;
-  label: LeadLabel | null;
+  label: LeadLabel;
   progress: LeadProgress;
   threadId: string;
   formMode: string;

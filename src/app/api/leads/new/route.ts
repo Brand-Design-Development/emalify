@@ -1,7 +1,11 @@
 import { NextResponse } from "next/server";
 import { db } from "@emalify/server/db";
 import { z } from "zod";
-import { type LeadLabel, type LeadProgress } from "@emalify/lib/types";
+import {
+  LeadProgressZod,
+  type LeadLabel,
+  type LeadProgress,
+} from "@emalify/lib/types";
 import { verifyApiKey } from "@emalify/lib/api-auth";
 
 const leadSchema = z.object({
@@ -12,6 +16,7 @@ const leadSchema = z.object({
   current_position: z.string(),
   submission_date: z.string().optional(),
   customer_base_range: z.string().optional(),
+  progress: LeadProgressZod.default("Form Submitted"),
 });
 
 type Range = {
@@ -71,8 +76,7 @@ export async function POST(request: Request) {
     }
 
     // Create new lead
-    const progress: LeadProgress = "Form Submitted";
-    let label: LeadLabel | undefined = undefined;
+    let label: LeadLabel = "No Label";
     const customerBaseRange = validatedData.customer_base_range;
     if (customerBaseRange) {
       const range = parseMinAndMax(customerBaseRange);
@@ -92,7 +96,7 @@ export async function POST(request: Request) {
         company: validatedData.company,
         currentPosition: validatedData.current_position,
         submissionDate: parsedSubmissionDate ?? new Date(),
-        progress: progress,
+        progress: validatedData.progress,
         label: label,
       },
     });

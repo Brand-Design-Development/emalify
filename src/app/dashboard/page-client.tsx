@@ -32,6 +32,7 @@ const COLORS = {
   "High Budget Lead": "#0e75bc",
   "Medium Budget Lead": "#fcd11f",
   "Low Budget Lead": "#34A853",
+  "No Label": "#9AA0A6",
   "Form Submitted": "#4285F4",
   "Demo Call Booked": "#0e75bc",
   "Potential Lead": "#fcd11f",
@@ -46,13 +47,13 @@ export function DashboardPageClient() {
 
   // Prepare data for charts
   const labelChartData =
-    stats?.labelStats
-      .filter((stat) => stat.label !== null)
-      .map((stat) => ({
-        name: stat.label!.replace(" Budget Lead", ""),
-        value: stat.count,
-        fullName: stat.label!,
-      })) ?? [];
+    stats?.labelStats.map((stat) => ({
+      name: stat.label
+        .replace(" Budget Lead", "")
+        .replace("No Label", "No Label"),
+      value: stat.count,
+      fullName: stat.label,
+    })) ?? [];
 
   const progressChartData =
     stats?.progressStats.map((stat) => ({
@@ -82,118 +83,40 @@ export function DashboardPageClient() {
     ? ((totalConverted / stats.totalLeads) * 100).toFixed(1)
     : "0";
 
-  // Calculate additional metrics
   const demoCallBooked =
     stats?.progressStats.find((s) => s.progress === "Demo Call Booked")
       ?.count ?? 0;
-  const potentialLeads =
-    stats?.progressStats.find((s) => s.progress === "Potential Lead")?.count ??
-    0;
   const deadLeads =
     stats?.progressStats.find((s) => s.progress === "Dead Lead")?.count ?? 0;
-  const formSubmitted =
-    stats?.progressStats.find((s) => s.progress === "Form Submitted")?.count ??
-    0;
 
   const activeLeads = (stats?.totalLeads ?? 0) - deadLeads;
   const demoToConversionRate = demoCallBooked
     ? ((totalConverted / demoCallBooked) * 100).toFixed(1)
     : "0";
 
-  // Conversion Funnel Data - showing actual progression
-  // Calculate percentages relative to total leads (not first stage)
-  const totalLeadsCount = stats?.totalLeads ?? 0;
-  const funnelData = [
-    {
-      name: "Form Submitted",
-      value: formSubmitted,
-      fill: "#4285F4",
-      percentage:
-        totalLeadsCount > 0
-          ? ((formSubmitted / totalLeadsCount) * 100).toFixed(1)
-          : "0",
-    },
-    {
-      name: "Demo Call Booked",
-      value: demoCallBooked,
-      fill: "#0e75bc",
-      percentage:
-        totalLeadsCount > 0
-          ? ((demoCallBooked / totalLeadsCount) * 100).toFixed(1)
-          : "0",
-    },
-    {
-      name: "Potential Lead",
-      value: potentialLeads,
-      fill: "#fcd11f",
-      percentage:
-        totalLeadsCount > 0
-          ? ((potentialLeads / totalLeadsCount) * 100).toFixed(1)
-          : "0",
-    },
-    {
-      name: "Converted",
-      value: totalConverted,
-      fill: "#34A853",
-      percentage:
-        totalLeadsCount > 0
-          ? ((totalConverted / totalLeadsCount) * 100).toFixed(1)
-          : "0",
-    },
-  ];
-
-  // Weekly trend data (last 7 days)
-  const last7Days = Array.from({ length: 7 }, (_, i) => {
-    const date = subDays(new Date(), 6 - i);
+  // 30-day trend data with all progress states
+  const last30Days = Array.from({ length: 30 }, (_, i) => {
+    const date = subDays(new Date(), 29 - i);
     return {
-      date: format(date, "EEE"),
+      date: format(date, "MMM dd"),
       fullDate: startOfDay(date),
-      leads: 0,
-      converted: 0,
+      "Form Submitted": 0,
+      "Demo Call Booked": 0,
+      "Potential Lead": 0,
+      Converted: 0,
+      "Dead Lead": 0,
     };
   });
 
   stats?.leadsOverTime.forEach((lead) => {
     const leadDate = startOfDay(new Date(lead.submissionDate));
-    const dayData = last7Days.find(
+    const dayData = last30Days.find(
       (d) => d.fullDate.getTime() === leadDate.getTime(),
     );
-    if (dayData) {
-      dayData.leads++;
-      if (lead.progress === "Converted") {
-        dayData.converted++;
-      }
+    if (dayData && lead.progress) {
+      dayData[lead.progress as keyof typeof dayData]++;
     }
   });
-
-  // Budget performance analysis
-  const budgetPerformance = stats?.labelStats
-    .filter((stat) => stat.label !== null)
-    .map((stat) => {
-      const leadsForLabel = stats.leadsOverTime.filter(
-        (l) => l.label === stat.label,
-      );
-      const convertedCount = leadsForLabel.filter(
-        (l) => l.progress === "Converted",
-      ).length;
-      const convRate =
-        stat.count > 0 ? ((convertedCount / stat.count) * 100).toFixed(1) : "0";
-
-      return {
-        label: stat.label!.replace(" Budget Lead", ""),
-        total: stat.count,
-        converted: convertedCount,
-        conversionRate: parseFloat(convRate),
-      };
-    });
-
-  // Progress breakdown with percentages
-  const progressBreakdown = stats?.progressStats.map((stat) => ({
-    name: stat.progress,
-    count: stat.count,
-    percentage: ((stat.count / (stats?.totalLeads || 1)) * 100).toFixed(1),
-    fill: COLORS[stat.progress as keyof typeof COLORS],
-  }));
 
   return (
     <div className="p-8">
@@ -328,73 +251,55 @@ export function DashboardPageClient() {
         </div>
       )}
 
-      {/* Charts - Row 1 */}
+      {/* 7-Day Activity Trend */}
       {hasLeads && (
-        <div className="mb-8 grid gap-6 lg:grid-cols-2">
-          {/* Conversion Funnel */}
+        <div className="mb-8">
           <div className="rounded-lg bg-gray-50 p-6">
             <h2 className="mb-4 text-lg font-semibold text-gray-900">
-              Lead Stage Distribution
+              30-Day Activity Trend
             </h2>
-            <p className="mb-4 text-xs text-gray-500">
-              Percentage of total leads in each stage
-            </p>
-            <div className="space-y-3">
-              {funnelData.map((stage) => {
-                const widthPercentage = parseFloat(stage.percentage);
-                return (
-                  <div key={stage.name}>
-                    <div className="mb-1 flex items-center justify-between text-sm">
-                      <span className="font-medium text-gray-700">
-                        {stage.name}
-                      </span>
-                      <span className="text-gray-600">
-                        {stage.value} ({stage.percentage}%)
-                      </span>
-                    </div>
-                    <div className="h-10 w-full rounded-lg bg-gray-200">
-                      <div
-                        className="flex h-full items-center justify-center rounded-lg text-sm font-semibold text-white transition-all"
-                        style={{
-                          width: `${Math.max(widthPercentage, stage.value > 0 ? 10 : 0)}%`,
-                          backgroundColor: stage.fill,
-                          minWidth: stage.value > 0 ? "60px" : "0",
-                        }}
-                      >
-                        {stage.value > 0 && stage.value}
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* Weekly Activity */}
-          <div className="rounded-lg bg-gray-50 p-6">
-            <h2 className="mb-4 text-lg font-semibold text-gray-900">
-              7-Day Activity Trend
-            </h2>
-            <ResponsiveContainer width="100%" height={300}>
-              <ComposedChart data={last7Days}>
+            <ResponsiveContainer width="100%" height={350}>
+              <ComposedChart data={last30Days}>
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="date" />
+                <XAxis
+                  dataKey="date"
+                  angle={-45}
+                  textAnchor="end"
+                  height={80}
+                  tick={{ fontSize: 10 }}
+                />
                 <YAxis />
                 <Tooltip />
                 <Legend />
                 <Bar
-                  dataKey="leads"
-                  fill="#0e75bc"
-                  name="New Leads"
-                  radius={[8, 8, 0, 0]}
+                  dataKey="Form Submitted"
+                  stackId="a"
+                  fill="#4285F4"
+                  radius={[0, 0, 0, 0]}
                 />
-                <Line
-                  type="monotone"
-                  dataKey="converted"
-                  stroke="#34A853"
-                  strokeWidth={3}
-                  name="Conversions"
-                  dot={{ fill: "#34A853", r: 5 }}
+                <Bar
+                  dataKey="Demo Call Booked"
+                  stackId="a"
+                  fill="#0e75bc"
+                  radius={[0, 0, 0, 0]}
+                />
+                <Bar
+                  dataKey="Potential Lead"
+                  stackId="a"
+                  fill="#fcd11f"
+                  radius={[0, 0, 0, 0]}
+                />
+                <Bar
+                  dataKey="Converted"
+                  stackId="a"
+                  fill="#34A853"
+                  radius={[0, 0, 0, 0]}
+                />
+                <Bar
+                  dataKey="Dead Lead"
+                  stackId="a"
+                  fill="#9AA0A6"
+                  radius={[8, 8, 0, 0]}
                 />
               </ComposedChart>
             </ResponsiveContainer>
@@ -402,15 +307,14 @@ export function DashboardPageClient() {
         </div>
       )}
 
-      {/* Charts - Row 2 */}
+      {/* Budget Distribution & Lead Progress Status */}
       {hasLeads && (
-        <div className="mb-8 grid gap-6 lg:grid-cols-3">
-          {/* Lead Labels Distribution */}
+        <div className="mb-8 grid gap-6 lg:grid-cols-2">
           <div className="rounded-lg bg-gray-50 p-6">
             <h2 className="mb-4 text-lg font-semibold text-gray-900">
               Budget Distribution
             </h2>
-            <ResponsiveContainer width="100%" height={280}>
+            <ResponsiveContainer width="100%" height={300}>
               <PieChart>
                 <Pie
                   data={labelChartData}
@@ -420,7 +324,7 @@ export function DashboardPageClient() {
                   label={(props) =>
                     `${props.name!} (${(((props.percent as number | undefined) ?? 0) * 100).toFixed(0)}%)`
                   }
-                  outerRadius={80}
+                  outerRadius={90}
                   fill="#8884d8"
                   dataKey="value"
                 >
@@ -436,12 +340,11 @@ export function DashboardPageClient() {
             </ResponsiveContainer>
           </div>
 
-          {/* Progress Status */}
           <div className="rounded-lg bg-gray-50 p-6">
             <h2 className="mb-4 text-lg font-semibold text-gray-900">
               Lead Progress Status
             </h2>
-            <ResponsiveContainer width="100%" height={280}>
+            <ResponsiveContainer width="100%" height={300}>
               <BarChart data={progressChartData}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis
@@ -453,61 +356,26 @@ export function DashboardPageClient() {
                 />
                 <YAxis />
                 <Tooltip />
-                <Bar dataKey="count" fill="#0e75bc" radius={[8, 8, 0, 0]} />
+                <Bar dataKey="count" radius={[8, 8, 0, 0]}>
+                  {progressChartData.map((entry, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={COLORS[entry.name as keyof typeof COLORS]}
+                    />
+                  ))}
+                </Bar>
               </BarChart>
             </ResponsiveContainer>
-          </div>
-
-          {/* Budget Performance */}
-          <div className="rounded-lg bg-gray-50 p-6">
-            <h2 className="mb-4 text-lg font-semibold text-gray-900">
-              Budget Performance
-            </h2>
-            <div className="space-y-4">
-              {budgetPerformance?.map((budget) => (
-                <div key={budget.label} className="space-y-1">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium text-gray-700">
-                      {budget.label}
-                    </span>
-                    <span className="text-sm text-gray-600">
-                      {budget.converted}/{budget.total}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="h-2 flex-1 rounded-full bg-gray-200">
-                      <div
-                        className="h-2 rounded-full bg-green-500"
-                        style={{ width: `${budget.conversionRate}%` }}
-                      />
-                    </div>
-                    <span className="text-xs font-medium text-gray-600">
-                      {budget.conversionRate}%
-                    </span>
-                  </div>
-                </div>
-              ))}
-            </div>
-            <div className="mt-6 rounded-lg bg-white p-4">
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-semibold text-gray-700">
-                  Overall
-                </span>
-                <span className="text-lg font-bold text-green-600">
-                  {conversionRate}%
-                </span>
-              </div>
-            </div>
           </div>
         </div>
       )}
 
-      {/* Leads Over Time */}
+      {/* Lead Acquisition Trend */}
       {hasLeads && (
-        <div className="mb-8 grid gap-6 lg:grid-cols-3">
-          <div className="rounded-lg bg-gray-50 p-6 lg:col-span-2">
+        <div className="mb-8">
+          <div className="rounded-lg bg-gray-50 p-6">
             <h2 className="mb-4 text-lg font-semibold text-gray-900">
-              Lead Acquisition Trend (Last 30 Days)
+              30-Day New Leads Trend
             </h2>
             <ResponsiveContainer width="100%" height={300}>
               <AreaChart data={leadsOverTimeData}>
@@ -531,39 +399,6 @@ export function DashboardPageClient() {
                 />
               </AreaChart>
             </ResponsiveContainer>
-          </div>
-
-          {/* Progress Breakdown */}
-          <div className="rounded-lg bg-gray-50 p-6">
-            <h2 className="mb-4 text-lg font-semibold text-gray-900">
-              Pipeline Breakdown
-            </h2>
-            <div className="space-y-3">
-              {progressBreakdown?.map((item) => (
-                <div
-                  key={item.name}
-                  className="flex items-center justify-between rounded-lg bg-white p-3"
-                >
-                  <div className="flex items-center gap-3">
-                    <div
-                      className="h-3 w-3 rounded-full"
-                      style={{ backgroundColor: item.fill }}
-                    />
-                    <div>
-                      <p className="text-sm font-medium text-gray-900">
-                        {item.name}
-                      </p>
-                      <p className="text-xs text-gray-500">
-                        {item.percentage}% of total
-                      </p>
-                    </div>
-                  </div>
-                  <p className="text-lg font-semibold text-gray-900">
-                    {item.count}
-                  </p>
-                </div>
-              ))}
-            </div>
           </div>
         </div>
       )}

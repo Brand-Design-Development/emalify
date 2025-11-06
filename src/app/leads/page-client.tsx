@@ -28,6 +28,7 @@ const COLORS = {
   "High Budget Lead": "#0e75bc",
   "Medium Budget Lead": "#fcd11f",
   "Low Budget Lead": "#34A853",
+  "No Label": "#9AA0A6",
   "Form Submitted": "#4285F4",
   "Demo Call Booked": "#0e75bc",
   "Potential Lead": "#fcd11f",
@@ -190,7 +191,7 @@ export function LeadsPageClient() {
               <option value="High Budget Lead">High Budget</option>
               <option value="Medium Budget Lead">Medium Budget</option>
               <option value="Low Budget Lead">Low Budget</option>
-              <option value="null">No Label</option>
+              <option value="No Label">No Label</option>
             </select>
           </div>
 
@@ -483,7 +484,7 @@ export function LeadsPageClient() {
                         <td className="px-3 py-2 whitespace-nowrap">
                           {isEditing ? (
                             <select
-                              value={editForm.label ?? ""}
+                              value={editForm.label ?? "No Label"}
                               onChange={(e) =>
                                 setEditForm({
                                   ...editForm,
@@ -493,7 +494,7 @@ export function LeadsPageClient() {
                               onKeyDown={handleKeyDown}
                               className="w-full cursor-pointer rounded border border-gray-300 px-2 py-1 text-sm"
                             >
-                              <option value="">No Label</option>
+                              <option value="No Label">No Label</option>
                               <option value="High Budget Lead">
                                 High Budget
                               </option>
@@ -504,7 +505,7 @@ export function LeadsPageClient() {
                                 Low Budget
                               </option>
                             </select>
-                          ) : lead.label ? (
+                          ) : (
                             <span
                               className="inline-flex rounded-full px-2 py-1 text-xs font-semibold"
                               style={{
@@ -514,11 +515,12 @@ export function LeadsPageClient() {
                                   "#000000",
                               }}
                             >
-                              {lead.label.replace(" Budget Lead", "")}
-                            </span>
-                          ) : (
-                            <span className="inline-flex rounded-full bg-gray-200 px-2 py-1 text-xs font-semibold text-gray-600">
-                              No Label
+                              {lead.label === "No Label"
+                                ? "No Label"
+                                : (lead.label ?? "No Label").replace(
+                                    " Budget Lead",
+                                    "",
+                                  )}
                             </span>
                           )}
                         </td>
