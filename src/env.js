@@ -11,6 +11,11 @@ export const env = createEnv({
     NODE_ENV: z
       .enum(["development", "test", "production"])
       .default("development"),
+    ADMIN_PASSWORD: z.string().min(1),
+    SESSION_COOKIE_NAME: z.string().default("emalify_lms_session"),
+    SESSION_DURATION_DAYS: z.coerce.number().default(30),
+    CRON_SECRET: z.string().min(1),
+    API_KEY: z.string().min(1),
   },
 
   /**
@@ -29,6 +34,11 @@ export const env = createEnv({
   runtimeEnv: {
     DATABASE_URL: process.env.DATABASE_URL,
     NODE_ENV: process.env.NODE_ENV,
+    ADMIN_PASSWORD: process.env.ADMIN_PASSWORD,
+    SESSION_COOKIE_NAME: process.env.SESSION_COOKIE_NAME,
+    SESSION_DURATION_DAYS: process.env.SESSION_DURATION_DAYS,
+    CRON_SECRET: process.env.CRON_SECRET,
+    API_KEY: process.env.API_KEY,
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   },
   /**

@@ -11,6 +11,7 @@ import superjson from "superjson";
 import { ZodError } from "zod";
 
 import { db } from "@emalify/server/db";
+import { isAuthenticated } from "@emalify/lib/auth";
 
 /**
  * 1. CONTEXT
@@ -25,8 +26,11 @@ import { db } from "@emalify/server/db";
  * @see https://trpc.io/docs/server/context
  */
 export const createTRPCContext = async (opts: { headers: Headers }) => {
+  const authenticated = await isAuthenticated();
+
   return {
     db,
+    authenticated,
     ...opts,
   };
 };
@@ -104,3 +108,23 @@ const timingMiddleware = t.middleware(async ({ next, path }) => {
  * are logged in.
  */
 export const publicProcedure = t.procedure.use(timingMiddleware);
+
+/**
+ * Protected procedure
+ *
+ * This procedure requires authentication. Use this for endpoints that should only be accessible
+ * to authenticated users.
+ */
+export const protectedProcedure = t.procedure
+  .use(timingMiddleware)
+  .use(async ({ ctx, next }) => {
+    if (!ctx.authenticated) {
+      throw new Error("Unauthorized");
+    }
+    return next({
+      ctx: {
+        ...ctx,
+        authenticated: true,
+      },
+    });
+  });

@@ -2,6 +2,37 @@ import { NextResponse } from "next/server";
 import { db } from "@emalify/server/db";
 import { z } from "zod";
 import { LeadLabelZod, LeadProgressZod } from "@emalify/lib/types";
+import { verifyApiKey } from "@emalify/lib/api-auth";
+
+/**
+ * POST /api/lead/new
+ * Creates a new lead in the database
+ *
+ * Authentication: Requires API key in 'x-api-key' header
+ *
+ * Example usage:
+ * ```
+ * fetch('/api/lead/new', {
+ *   method: 'POST',
+ *   headers: {
+ *     'Content-Type': 'application/json',
+ *     'x-api-key': 'your-api-key-here'
+ *   },
+ *   body: JSON.stringify({
+ *     "Full Name": "John Doe",
+ *     "Email Address": "john@example.com",
+ *     "Phone Number": "1234567890",
+ *     "Company": "Example Corp",
+ *     "Current Position": "CEO",
+ *     "Submission Date": "2024-01-01T00:00:00Z",
+ *     "Label": "High Budget Lead",
+ *     "threadId": "unique-thread-id",
+ *     "formMode": "standard",
+ *     "Progress": "Form Submitted"
+ *   })
+ * })
+ * ```
+ */
 
 const leadSchema = z.object({
   "Full Name": z.string(),
@@ -17,6 +48,12 @@ const leadSchema = z.object({
 });
 
 export async function POST(request: Request) {
+  // Verify API key
+  const authError = verifyApiKey(request);
+  if (authError) {
+    return authError;
+  }
+
   try {
     const body: unknown = await request.json();
 

@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { Menu, Users, PieChart, RefreshCw } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
+import { Menu, Users, PieChart, RefreshCw, LogOut } from "lucide-react";
 import { cn } from "@emalify/lib/utils";
 import Image from "next/image";
 import { api } from "@emalify/trpc/react";
@@ -28,13 +28,25 @@ const sidebarItems = [
 export default function ClientLayout({ children }: ClientLayoutProps) {
   const [sidebarExpanded, setSidebarExpanded] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
   const utils = api.useUtils();
   const [isrefreshing, setIsrefreshing] = useState(false);
+
+  const logoutMutation = api.auth.logout.useMutation({
+    onSuccess: () => {
+      router.push("/login");
+      router.refresh();
+    },
+  });
 
   const handlerefresh = async () => {
     setIsrefreshing(true);
     await utils.invalidate();
     setTimeout(() => setIsrefreshing(false), 500);
+  };
+
+  const handleLogout = () => {
+    logoutMutation.mutate();
   };
 
   // Close sidebar when clicking outside
@@ -64,6 +76,11 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
 
   const isActive = (href: string) =>
     pathname === href || pathname.startsWith(href + "/");
+
+  // If on login page, just render children without the layout
+  if (pathname === "/login") {
+    return <>{children}</>;
+  }
 
   return (
     <div
@@ -100,18 +117,31 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
             </Link>
           </div>
 
-          {/* refresh Button */}
-          <button
-            onClick={handlerefresh}
-            disabled={isrefreshing}
-            className="flex cursor-pointer items-center gap-2 rounded-lg px-4 py-2 text-white transition-colors hover:bg-blue-800/40 disabled:cursor-not-allowed disabled:opacity-50"
-            title="Refresh all data"
-          >
-            <RefreshCw
-              className={cn("h-5 w-5", isrefreshing && "animate-spin")}
-            />
-            <span className="text-sm font-medium">Refresh</span>
-          </button>
+          <div className="flex items-center gap-2">
+            {/* refresh Button */}
+            <button
+              onClick={handlerefresh}
+              disabled={isrefreshing}
+              className="flex cursor-pointer items-center gap-2 rounded-lg px-4 py-2 text-white transition-colors hover:bg-blue-800/40 disabled:cursor-not-allowed disabled:opacity-50"
+              title="Refresh all data"
+            >
+              <RefreshCw
+                className={cn("h-5 w-5", isrefreshing && "animate-spin")}
+              />
+              <span className="text-sm font-medium">Refresh</span>
+            </button>
+
+            {/* Logout Button */}
+            <button
+              onClick={handleLogout}
+              disabled={logoutMutation.isPending}
+              className="flex cursor-pointer items-center gap-2 rounded-lg px-4 py-2 text-white transition-colors hover:bg-blue-800/40 disabled:cursor-not-allowed disabled:opacity-50"
+              title="Logout"
+            >
+              <LogOut className="h-5 w-5" />
+              <span className="text-sm font-medium">Logout</span>
+            </button>
+          </div>
         </div>
       </header>
 

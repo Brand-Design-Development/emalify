@@ -1,3 +1,9 @@
 {
-    "buildCommand": "npx prisma generate && ./scripts/setup-prisma.sh && next build"
+    "buildCommand": "npx prisma generate && ./scripts/setup-prisma.sh && next build",
+    "crons": [
+        {
+            "path": "/api/cron/cleanup-sessions",
+            "schedule": "0 0 * * *"
+        }
+    ]
 }

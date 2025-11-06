@@ -30,3 +30,13 @@ model Lead {
     @@index([progress])
     @@index([submissionDate])
 }
+
+model Session {
+    id        String   @id @default(cuid())
+    token     String   @unique
+    expiresAt DateTime
+    createdAt DateTime @default(now())
+
+    @@index([token])
+    @@index([expiresAt])
+}
