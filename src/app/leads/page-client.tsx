@@ -30,7 +30,7 @@ const COLORS = {
   "Low Budget Lead": "#34A853",
   "No Label": "#9AA0A6",
   "Form Submitted": "#4285F4",
-  "Demo Call Booked": "#0e75bc",
+  "Demo Booked": "#0e75bc",
   "Potential Lead": "#fcd11f",
   Converted: "#34A853",
   "Dead Lead": "#9AA0A6",
@@ -38,7 +38,7 @@ const COLORS = {
 
 const PROGRESS_ICONS = {
   "Form Submitted": AlertCircle,
-  "Demo Call Booked": Phone,
+  "Demo Booked": Phone,
   "Potential Lead": TrendingUp,
   Converted: CheckCircle,
   "Dead Lead": XCircle,
@@ -207,7 +207,7 @@ export function LeadsPageClient() {
             >
               <option value="">All Progress</option>
               <option value="Form Submitted">Form Submitted</option>
-              <option value="Demo Call Booked">Demo Call Booked</option>
+              <option value="Demo Booked">Demo Booked</option>
               <option value="Potential Lead">Potential Lead</option>
               <option value="Converted">Converted</option>
               <option value="Dead Lead">Dead Lead</option>
@@ -540,9 +540,7 @@ export function LeadsPageClient() {
                               <option value="Form Submitted">
                                 Form Submitted
                               </option>
-                              <option value="Demo Call Booked">
-                                Demo Call Booked
-                              </option>
+                              <option value="Demo Booked">Demo Booked</option>
                               <option value="Potential Lead">
                                 Potential Lead
                               </option>

@@ -34,7 +34,7 @@ const COLORS = {
   "Low Budget Lead": "#34A853",
   "No Label": "#9AA0A6",
   "Form Submitted": "#4285F4",
-  "Demo Call Booked": "#0e75bc",
+  "Demo Booked": "#0e75bc",
   "Potential Lead": "#fcd11f",
   Converted: "#34A853",
   "Dead Lead": "#9AA0A6",
@@ -84,8 +84,7 @@ export function DashboardPageClient() {
     : "0";
 
   const demoCallBooked =
-    stats?.progressStats.find((s) => s.progress === "Demo Call Booked")
-      ?.count ?? 0;
+    stats?.progressStats.find((s) => s.progress === "Demo Booked")?.count ?? 0;
   const deadLeads =
     stats?.progressStats.find((s) => s.progress === "Dead Lead")?.count ?? 0;
 
@@ -101,7 +100,7 @@ export function DashboardPageClient() {
       date: format(date, "MMM dd"),
       fullDate: startOfDay(date),
       "Form Submitted": 0,
-      "Demo Call Booked": 0,
+      "Demo Booked": 0,
       "Potential Lead": 0,
       Converted: 0,
       "Dead Lead": 0,
@@ -278,7 +277,7 @@ export function DashboardPageClient() {
                   radius={[0, 0, 0, 0]}
                 />
                 <Bar
-                  dataKey="Demo Call Booked"
+                  dataKey="Demo Booked"
                   stackId="a"
                   fill="#0e75bc"
                   radius={[0, 0, 0, 0]}

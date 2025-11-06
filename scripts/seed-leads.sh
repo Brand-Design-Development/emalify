@@ -37,7 +37,7 @@ curl -X POST $EMALIFY_HOME_URL/api/leads/new \
 
 echo -e "\n\nLead 1 added (High Budget - Nov 5 - Form Submitted)"
 
-# Lead 2 - Medium Budget - Demo Call Booked (Nov 3)
+# Lead 2 - Medium Budget - Demo Booked (Nov 3)
 curl -X POST $EMALIFY_HOME_URL/api/leads/new \
   -H "Content-Type: application/json" \
   -H "x-api-key: $EMALIFY_LMS_API_KEY" \
@@ -49,10 +49,10 @@ curl -X POST $EMALIFY_HOME_URL/api/leads/new \
     "current_position": "CEO",
     "submission_date": "2025-11-03T14:20:00.000Z",
     "customer_base_range": "50001-100000",
-    "progress": "Demo Call Booked"
+    "progress": "Demo Booked"
   }'
 
-echo -e "\n\nLead 2 added (Medium Budget - Nov 3 - Demo Call Booked)"
+echo -e "\n\nLead 2 added (Medium Budget - Nov 3 - Demo Booked)"
 
 # Lead 3 - High Budget - Converted (Oct 28)
 curl -X POST $EMALIFY_HOME_URL/api/leads/new \
@@ -105,7 +105,7 @@ curl -X POST $EMALIFY_HOME_URL/api/leads/new \
 
 echo -e "\n\nLead 5 added (Medium Budget - Oct 24 - Potential Lead)"
 
-# Lead 6 - High Budget - Demo Call Booked (Oct 23)
+# Lead 6 - High Budget - Demo Booked (Oct 23)
 curl -X POST $EMALIFY_HOME_URL/api/leads/new \
   -H "Content-Type: application/json" \
   -H "x-api-key: $EMALIFY_LMS_API_KEY" \
@@ -117,10 +117,10 @@ curl -X POST $EMALIFY_HOME_URL/api/leads/new \
     "current_position": "CFO",
     "submission_date": "2025-10-23T13:15:00.000Z",
     "customer_base_range": "200001-500000",
-    "progress": "Demo Call Booked"
+    "progress": "Demo Booked"
   }'
 
-echo -e "\n\nLead 6 added (High Budget - Oct 23 - Demo Call Booked)"
+echo -e "\n\nLead 6 added (High Budget - Oct 23 - Demo Booked)"
 
 # Lead 7 - Low Budget - Dead Lead (Oct 12)
 curl -X POST $EMALIFY_HOME_URL/api/leads/new \
@@ -223,7 +223,7 @@ curl -X POST $EMALIFY_HOME_URL/api/leads/new \
 
 echo -e "\n\nLead 12 added (High Budget - Oct 18 - Converted)"
 
-# Lead 13 - Medium Budget - Demo Call Booked (Oct 31)
+# Lead 13 - Medium Budget - Demo Booked (Oct 31)
 curl -X POST $EMALIFY_HOME_URL/api/leads/new \
   -H "Content-Type: application/json" \
   -H "x-api-key: $EMALIFY_LMS_API_KEY" \
@@ -235,10 +235,10 @@ curl -X POST $EMALIFY_HOME_URL/api/leads/new \
     "current_position": "CMO",
     "submission_date": "2025-10-31T14:30:00.000Z",
     "customer_base_range": "50001-100000",
-    "progress": "Demo Call Booked"
+    "progress": "Demo Booked"
   }'
 
-echo -e "\n\nLead 13 added (Medium Budget - Oct 31 - Demo Call Booked)"
+echo -e "\n\nLead 13 added (Medium Budget - Oct 31 - Demo Booked)"
 
 # Lead 14 - Low Budget - Form Submitted (Nov 1)
 curl -X POST $EMALIFY_HOME_URL/api/leads/new \
@@ -291,7 +291,7 @@ curl -X POST $EMALIFY_HOME_URL/api/leads/new \
 
 echo -e "\n\nLead 16 added (Medium Budget - Oct 16 - Converted)"
 
-# Lead 17 - High Budget - Demo Call Booked (Oct 29)
+# Lead 17 - High Budget - Demo Booked (Oct 29)
 curl -X POST $EMALIFY_HOME_URL/api/leads/new \
   -H "Content-Type: application/json" \
   -H "x-api-key: $EMALIFY_LMS_API_KEY" \
@@ -303,10 +303,10 @@ curl -X POST $EMALIFY_HOME_URL/api/leads/new \
     "current_position": "COO",
     "submission_date": "2025-10-29T10:30:00.000Z",
     "customer_base_range": ">1000000",
-    "progress": "Demo Call Booked"
+    "progress": "Demo Booked"
   }'
 
-echo -e "\n\nLead 17 added (High Budget - Oct 29 - Demo Call Booked)"
+echo -e "\n\nLead 17 added (High Budget - Oct 29 - Demo Booked)"
 
 # Lead 18 - Low Budget - Potential Lead (Oct 25)
 curl -X POST $EMALIFY_HOME_URL/api/leads/new \
@@ -376,7 +376,7 @@ curl -X POST $EMALIFY_HOME_URL/api/leads/new \
 
 echo -e "\n\nLead 21 added (Medium Budget - Oct 10 - Dead Lead)"
 
-# Lead 22 - High Budget - Demo Call Booked (Nov 4)
+# Lead 22 - High Budget - Demo Booked (Nov 4)
 curl -X POST $EMALIFY_HOME_URL/api/leads/new \
   -H "Content-Type: application/json" \
   -H "x-api-key: $EMALIFY_LMS_API_KEY" \
@@ -388,10 +388,10 @@ curl -X POST $EMALIFY_HOME_URL/api/leads/new \
     "current_position": "CTO",
     "submission_date": "2025-11-04T14:45:00.000Z",
     "customer_base_range": "200001-500000",
-    "progress": "Demo Call Booked"
+    "progress": "Demo Booked"
   }'
 
-echo -e "\n\nLead 22 added (High Budget - Nov 4 - Demo Call Booked)"
+echo -e "\n\nLead 22 added (High Budget - Nov 4 - Demo Booked)"
 
 # Lead 23 - Low Budget - Form Submitted (Oct 26)
 curl -X POST $EMALIFY_HOME_URL/api/leads/new \
@@ -478,7 +478,7 @@ curl -X POST $EMALIFY_HOME_URL/api/leads/new \
 
 echo -e "\n\nLead 27 added (Low Budget - Oct 8 - Dead Lead)"
 
-# Lead 28 - Medium Budget - Demo Call Booked (Oct 21)
+# Lead 28 - Medium Budget - Demo Booked (Oct 21)
 curl -X POST $EMALIFY_HOME_URL/api/leads/new \
   -H "Content-Type: application/json" \
   -H "x-api-key: $EMALIFY_LMS_API_KEY" \
@@ -490,10 +490,10 @@ curl -X POST $EMALIFY_HOME_URL/api/leads/new \
     "current_position": "COO",
     "submission_date": "2025-10-21T13:45:00.000Z",
     "customer_base_range": "10001-50000",
-    "progress": "Demo Call Booked"
+    "progress": "Demo Booked"
   }'
 
-echo -e "\n\nLead 28 added (Medium Budget - Oct 21 - Demo Call Booked)"
+echo -e "\n\nLead 28 added (Medium Budget - Oct 21 - Demo Booked)"
 
 # Lead 29 - High Budget - Potential Lead (Nov 3)
 curl -X POST $EMALIFY_HOME_URL/api/leads/new \

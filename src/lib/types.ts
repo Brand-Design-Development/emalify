@@ -2,7 +2,7 @@ import z from "zod";
 
 export const LeadProgresses = [
   "Form Submitted",
-  "Demo Call Booked",
+  "Demo Booked",
   "Dead Lead",
   "Potential Lead",
   "Converted",
