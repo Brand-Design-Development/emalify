@@ -38,3 +38,12 @@ model Session {
     @@index([token])
     @@index([expiresAt])
 }
+
+model Admin {
+    id        String   @id @default(cuid())
+    email     String   @unique
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@index([email])
+}

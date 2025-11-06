@@ -7,6 +7,7 @@ import {
   type LeadProgress,
 } from "@emalify/lib/types";
 import { verifyApiKey } from "@emalify/lib/api-auth";
+import { sendNewLeadNotification } from "@emalify/lib/email";
 
 const leadSchema = z.object({
   full_name: z.string(),
@@ -17,6 +18,7 @@ const leadSchema = z.object({
   submission_date: z.string().optional(),
   customer_base_range: z.string().optional(),
   progress: LeadProgressZod.default("Form Submitted"),
+  is_new: z.boolean().default(true),
 });
 
 type Range = {
@@ -100,6 +102,21 @@ export async function POST(request: Request) {
         label: label,
       },
     });
+
+    // Send email notification to admins
+    try {
+      const admins = await db.admin.findMany({
+        select: { email: true },
+      });
+      const adminEmails = admins.map((admin) => admin.email);
+
+      if (adminEmails.length > 0) {
+        await sendNewLeadNotification(lead, adminEmails);
+      }
+    } catch (emailError) {
+      console.error("Failed to send email notification:", emailError);
+      // Don't fail the request if email fails
+    }
 
     return NextResponse.json({ success: true, lead }, { status: 201 });
   } catch (error) {

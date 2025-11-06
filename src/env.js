@@ -16,6 +16,12 @@ export const env = createEnv({
     SESSION_DURATION_DAYS: z.coerce.number().default(30),
     CRON_SECRET: z.string().min(1),
     EMALIFY_LMS_API_KEY: z.string().min(1),
+    SMTP_HOST: z.string().min(1),
+    SMTP_PORT: z.coerce.number().default(587),
+    SMTP_USER: z.string().min(1),
+    SMTP_PASSWORD: z.string().min(1),
+    SMTP_FROM_EMAIL: z.string().email(),
+    SMTP_FROM_NAME: z.string().default("Emalify LMS"),
   },
 
   /**
@@ -39,6 +45,12 @@ export const env = createEnv({
     SESSION_DURATION_DAYS: process.env.SESSION_DURATION_DAYS,
     CRON_SECRET: process.env.CRON_SECRET,
     EMALIFY_LMS_API_KEY: process.env.EMALIFY_LMS_API_KEY,
+    SMTP_HOST: process.env.SMTP_HOST,
+    SMTP_PORT: process.env.SMTP_PORT,
+    SMTP_USER: process.env.SMTP_USER,
+    SMTP_PASSWORD: process.env.SMTP_PASSWORD,
+    SMTP_FROM_EMAIL: process.env.SMTP_FROM_EMAIL,
+    SMTP_FROM_NAME: process.env.SMTP_FROM_NAME,
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   },
   /**
