@@ -23,7 +23,6 @@ import {
   Area,
   AreaChart,
   ComposedChart,
-  Line,
 } from "recharts";
 import { format, subDays, startOfDay } from "date-fns";
 import { api } from "@emalify/trpc/react";
