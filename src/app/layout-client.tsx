@@ -3,7 +3,14 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Menu, Users, PieChart, RefreshCw, LogOut } from "lucide-react";
+import {
+  Menu,
+  Users,
+  PieChart,
+  RefreshCw,
+  LogOut,
+  Loader2,
+} from "lucide-react";
 import { cn } from "@emalify/lib/utils";
 import Image from "next/image";
 import { api } from "@emalify/trpc/react";
@@ -27,6 +34,7 @@ const sidebarItems = [
 
 export default function ClientLayout({ children }: ClientLayoutProps) {
   const [sidebarExpanded, setSidebarExpanded] = useState(false);
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
   const utils = api.useUtils();
@@ -34,6 +42,7 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
 
   const logoutMutation = api.auth.logout.useMutation({
     onSuccess: () => {
+      setShowLogoutModal(false);
       router.push("/login");
       router.refresh();
     },
@@ -46,6 +55,10 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
   };
 
   const handleLogout = () => {
+    setShowLogoutModal(true);
+  };
+
+  const confirmLogout = () => {
     logoutMutation.mutate();
   };
 
@@ -134,8 +147,7 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
             {/* Logout Button */}
             <button
               onClick={handleLogout}
-              disabled={logoutMutation.isPending}
-              className="flex cursor-pointer items-center gap-2 rounded-lg px-4 py-2 text-white transition-colors hover:bg-blue-800/40 disabled:cursor-not-allowed disabled:opacity-50"
+              className="flex cursor-pointer items-center gap-2 rounded-lg px-4 py-2 text-white transition-colors hover:bg-blue-800/40"
               title="Logout"
             >
               <LogOut className="h-5 w-5" />
@@ -204,6 +216,44 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
         {/* Main Content Area */}
         <main className="flex-1 overflow-auto bg-white">{children}</main>
       </div>
+
+      {/* Logout Confirmation Modal */}
+      {showLogoutModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-xl">
+            <h2 className="mb-4 text-xl font-semibold text-gray-900">
+              Confirm Logout
+            </h2>
+            <p className="mb-6 text-gray-600">
+              Are you sure you want to log out?
+            </p>
+            <div className="flex justify-end gap-3">
+              <button
+                onClick={() => setShowLogoutModal(false)}
+                disabled={logoutMutation.isPending}
+                className="cursor-pointer rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmLogout}
+                disabled={logoutMutation.isPending}
+                className="cursor-pointer rounded-lg px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
+                style={{ backgroundColor: "#0e75bc" }}
+              >
+                {logoutMutation.isPending ? (
+                  <span className="flex items-center gap-2">
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    Logging out...
+                  </span>
+                ) : (
+                  "Log out"
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

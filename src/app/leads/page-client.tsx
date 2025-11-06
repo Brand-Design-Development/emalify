@@ -64,16 +64,18 @@ export function LeadsPageClient() {
 
   const utils = api.useUtils();
   const updateLead = api.lead.update.useMutation({
-    onSuccess: () => {
-      void utils.lead.invalidate();
+    onSuccess: async () => {
+      // Invalidate all lead queries including dashboard stats
+      await utils.lead.invalidate();
       setEditingLead(null);
       setEditForm({});
     },
   });
 
   const deleteLead = api.lead.delete.useMutation({
-    onSuccess: () => {
-      void utils.lead.invalidate();
+    onSuccess: async () => {
+      // Invalidate all lead queries including dashboard stats
+      await utils.lead.invalidate();
     },
   });
 
