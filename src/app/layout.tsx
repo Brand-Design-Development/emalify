@@ -1,5 +1,5 @@
 import "@emalify/styles/globals.css";
-
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { type Metadata } from "next";
 import { Geist } from "next/font/google";
 
@@ -26,6 +26,7 @@ export default function RootLayout({
         <TRPCReactProvider>
           <ClientLayout>{children}</ClientLayout>
         </TRPCReactProvider>
+        <SpeedInsights />
       </body>
     </html>
   );
