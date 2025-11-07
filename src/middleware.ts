@@ -6,8 +6,8 @@ import { verifyApiKey } from "./lib/api-auth";
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Verify API key for public API endpoints
-  if (pathname.startsWith("/api/")) {
+  // Verify API key for public new lead endpoint
+  if (pathname.startsWith("/api/leads/new")) {
     const response = verifyApiKey(request);
     if (response) {
       return response;
