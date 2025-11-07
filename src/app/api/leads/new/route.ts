@@ -93,18 +93,20 @@ export async function POST(request: Request) {
     });
 
     // Send email notification to admins
-    try {
-      const admins = await db.admin.findMany({
-        select: { email: true },
-      });
-      const adminEmails = admins.map((admin) => admin.email);
+    if (validatedData.is_new) {
+      try {
+        const admins = await db.admin.findMany({
+          select: { email: true },
+        });
+        const adminEmails = admins.map((admin) => admin.email);
 
-      if (adminEmails.length > 0) {
-        await sendNewLeadNotification(lead, adminEmails);
+        if (adminEmails.length > 0) {
+          await sendNewLeadNotification(lead, adminEmails);
+        }
+      } catch (emailError) {
+        console.error("Failed to send email notification:", emailError);
+        // Don't fail the request if email fails
       }
-    } catch (emailError) {
-      console.error("Failed to send email notification:", emailError);
-      // Don't fail the request if email fails
     }
 
     return NextResponse.json({ success: true, lead }, { status: 201 });
@@ -117,10 +119,7 @@ export async function POST(request: Request) {
         { status: 400 },
       );
     }
-
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 },
-    );
   }
+
+  return NextResponse.json({ error: "Internal server error" }, { status: 500 });
 }
