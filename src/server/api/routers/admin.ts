@@ -1,14 +1,18 @@
 import { z } from "zod";
-import { createTRPCRouter, publicProcedure } from "@emalify/server/api/trpc";
+import {
+  createTRPCRouter,
+  protectedProcedure,
+  publicProcedure,
+} from "@emalify/server/api/trpc";
 
 export const adminRouter = createTRPCRouter({
-  getAll: publicProcedure.query(async ({ ctx }) => {
+  getAll: protectedProcedure.query(async ({ ctx }) => {
     return ctx.db.admin.findMany({
       orderBy: { createdAt: "desc" },
     });
   }),
 
-  getById: publicProcedure
+  getById: protectedProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ ctx, input }) => {
       return ctx.db.admin.findUnique({
@@ -16,7 +20,7 @@ export const adminRouter = createTRPCRouter({
       });
     }),
 
-  create: publicProcedure
+  create: protectedProcedure
     .input(
       z.object({
         fullName: z.string().min(1, "Full name is required"),
@@ -29,7 +33,7 @@ export const adminRouter = createTRPCRouter({
       });
     }),
 
-  update: publicProcedure
+  update: protectedProcedure
     .input(
       z.object({
         id: z.string(),
@@ -45,7 +49,7 @@ export const adminRouter = createTRPCRouter({
       });
     }),
 
-  delete: publicProcedure
+  delete: protectedProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
       return ctx.db.admin.delete({

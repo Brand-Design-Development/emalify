@@ -6,12 +6,12 @@
  * TL;DR - This is where all the tRPC server stuff is created and plugged in. The pieces you will
  * need to use are documented accordingly near the end.
  */
-import { initTRPC } from "@trpc/server";
+import { initTRPC, TRPCError } from "@trpc/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
 
 import { db } from "@emalify/server/db";
-import { isAuthenticated } from "@emalify/lib/auth";
+import { getSession } from "@emalify/lib/auth";
 
 /**
  * 1. CONTEXT
@@ -26,7 +26,7 @@ import { isAuthenticated } from "@emalify/lib/auth";
  * @see https://trpc.io/docs/server/context
  */
 export const createTRPCContext = async (opts: { headers: Headers }) => {
-  const authenticated = await isAuthenticated();
+  const authenticated = !!(await getSession());
 
   return {
     db,
@@ -119,7 +119,7 @@ export const protectedProcedure = t.procedure
   .use(timingMiddleware)
   .use(async ({ ctx, next }) => {
     if (!ctx.authenticated) {
-      throw new Error("Unauthorized");
+      throw new TRPCError({ code: "UNAUTHORIZED", message: "Unauthorized" });
     }
     return next({
       ctx: {

@@ -1,12 +1,12 @@
 import { z } from "zod";
 import type { Prisma } from "@prisma/client";
 
-import { createTRPCRouter, publicProcedure } from "@emalify/server/api/trpc";
+import { createTRPCRouter, protectedProcedure } from "@emalify/server/api/trpc";
 import { LeadLabelZod, LeadProgressZod } from "@emalify/lib/types";
 
 export const leadRouter = createTRPCRouter({
   // Get all leads with optional filters
-  getAll: publicProcedure
+  getAll: protectedProcedure
     .input(
       z.object({
         label: z.string().optional(),
@@ -56,7 +56,7 @@ export const leadRouter = createTRPCRouter({
     }),
 
   // Get a single lead by ID
-  getById: publicProcedure
+  getById: protectedProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ ctx, input }) => {
       return ctx.db.lead.findUnique({
@@ -65,7 +65,7 @@ export const leadRouter = createTRPCRouter({
     }),
 
   // Update a lead
-  update: publicProcedure
+  update: protectedProcedure
     .input(
       z.object({
         id: z.string(),
@@ -87,7 +87,7 @@ export const leadRouter = createTRPCRouter({
     }),
 
   // Delete a lead
-  delete: publicProcedure
+  delete: protectedProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
       return ctx.db.lead.delete({
@@ -96,7 +96,7 @@ export const leadRouter = createTRPCRouter({
     }),
 
   // Get statistics for dashboard
-  getStats: publicProcedure.query(async ({ ctx }) => {
+  getStats: protectedProcedure.query(async ({ ctx }) => {
     const [totalLeads, labelStats, progressStats, recentLeads] =
       await Promise.all([
         ctx.db.lead.count(),

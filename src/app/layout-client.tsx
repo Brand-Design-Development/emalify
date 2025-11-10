@@ -54,7 +54,7 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
     },
   });
 
-  const handlerefresh = async () => {
+  const handleRefresh = async () => {
     setIsrefreshing(true);
     await utils.invalidate();
     setTimeout(() => setIsrefreshing(false), 500);
@@ -139,7 +139,7 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
           <div className="flex items-center gap-2">
             {/* refresh Button */}
             <button
-              onClick={handlerefresh}
+              onClick={handleRefresh}
               disabled={isrefreshing}
               className="flex cursor-pointer items-center gap-2 rounded-lg px-4 py-2 text-white transition-colors hover:bg-blue-800/40 disabled:cursor-not-allowed disabled:opacity-50"
               title="Refresh all data"

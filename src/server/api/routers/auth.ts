@@ -1,11 +1,7 @@
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "@emalify/server/api/trpc";
 import { env } from "@emalify/env";
-import {
-  createSession,
-  deleteSession,
-  isAuthenticated,
-} from "@emalify/lib/auth";
+import { createSession, deleteSession } from "@emalify/lib/auth";
 import { TRPCError } from "@trpc/server";
 
 export const authRouter = createTRPCRouter({
@@ -26,10 +22,5 @@ export const authRouter = createTRPCRouter({
   logout: publicProcedure.mutation(async () => {
     await deleteSession();
     return { success: true };
-  }),
-
-  checkAuth: publicProcedure.query(async () => {
-    const authenticated = await isAuthenticated();
-    return { authenticated };
   }),
 });

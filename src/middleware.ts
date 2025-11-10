@@ -1,33 +1,30 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { env } from "@emalify/env";
-import { verifyApiKey } from "./lib/api-auth";
+import { getSession } from "./lib/auth";
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Verify API key for public new lead endpoint
-  if (pathname.startsWith("/api/leads/new")) {
-    const response = verifyApiKey(request);
-    if (response) {
-      return response;
+  if (
+    // Uses EMALIFY_LMS_API_KEY
+    pathname.startsWith("/api/leads/new") ||
+    // Uses CRON_SECRET
+    pathname.startsWith("/api/cron/cleanup-sessions") ||
+    pathname.startsWith("/login") ||
+    // Custom handling of auth
+    pathname.startsWith("/api/trpc")
+  ) {
+    return NextResponse.next();
+  }
+
+  const session = await getSession();
+  if (!session) {
+    if (pathname.startsWith("/api/")) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-    return NextResponse.next();
-  }
-
-  if (pathname === "/login") {
-    return NextResponse.next();
-  }
-
-  const token = request.cookies.get(env.SESSION_COOKIE_NAME)?.value;
-
-  // If no session token, redirect to login
-  if (!token) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
-  // Session validation will be done in the layout/pages via server-side auth check
-  // Middleware just checks for cookie presence
   return NextResponse.next();
 }
 
@@ -42,4 +39,6 @@ export const config = {
      */
     "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
   ],
+
+  runtime: "nodejs",
 };

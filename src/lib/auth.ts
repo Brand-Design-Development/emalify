@@ -64,11 +64,6 @@ export async function deleteSession(): Promise<void> {
   cookieStore.delete(env.SESSION_COOKIE_NAME);
 }
 
-export async function isAuthenticated(): Promise<boolean> {
-  const session = await getSession();
-  return session !== null;
-}
-
 export async function cleanupExpiredSessions(): Promise<void> {
   await db.session.deleteMany({
     where: {
